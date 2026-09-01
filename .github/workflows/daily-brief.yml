@@ -22,7 +22,7 @@ import urllib.request
 import urllib.error
 
 MODEL = "claude-sonnet-5"
-MAX_TOKENS = 12000
+MAX_TOKENS = 20000
 MAX_TURNS = 12
 INDEX = "index.html"
 START = "<!-- BRIEF:START -->"
@@ -159,7 +159,8 @@ def call_api(prompt: str) -> str:
             continue
 
         if stop == "max_tokens":
-            print("  ! hit max_tokens - the fragment may be truncated")
+            print("  ! hit max_tokens - output truncated; raise MAX_TOKENS "
+                  "or ask for a shorter brief")
         break
     else:
         print(f"  ! gave up after {MAX_TURNS} turns")
@@ -168,13 +169,25 @@ def call_api(prompt: str) -> str:
 
 
 def clean(fragment: str) -> str:
-    """Strip code fences and any stray preamble before the first div."""
+    """Strip fences, drop any preamble, and close tags left open by truncation."""
     f = fragment.strip()
     for fence in ("```html", "```HTML", "```"):
         f = f.replace(fence, "")
     i = f.find("<div")
     if i > 0:
         f = f[i:]
+    f = f.strip()
+
+    # a truncated run can end mid-tag; cut back to the last complete one
+    if f.rfind(">") < f.rfind("<"):
+        f = f[:f.rfind("<")].rstrip()
+
+    # drop a trailing partial element that never got its closing tag
+    open_divs = f.count("<div") - f.count("</div>")
+    if 0 < open_divs <= 6:
+        f = f + ("\n</div>" * open_divs)
+        print(f"  repaired {open_divs} unclosed <div> from truncation")
+
     return f.strip()
 
 
