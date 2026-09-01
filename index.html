@@ -104,6 +104,10 @@ td.cell{min-width:62px;font-variant-numeric:tabular-nums}
 tr.kShort .pxcol,tr.kLong .pxcol{color:var(--accent)}
 tr.kShort td,tr.kLong td{border-top:1px solid var(--line2)}
 .pxcol .tag{font-size:8.5px;letter-spacing:.08em;color:var(--dim);display:block;margin-top:1px}
+tr.kSpot .pxcol{color:#FFFFFF}
+tr.kSpot .pxcol .tag{color:var(--muted)}
+tr.kSpot td{border-top:2px solid rgba(228,234,242,.75);
+  box-shadow:inset 0 1px 0 rgba(228,234,242,.12)}
 td.half{box-shadow:inset 2px 0 0 var(--accent)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--dim)}
 .legend span{display:flex;align-items:center;gap:5px}
@@ -239,6 +243,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
       <span><i class="sw" style="background:var(--profit)"></i>profit</span>
       <span><i class="sw" style="background:var(--loss)"></i>loss</span>
       <span><i class="sw" style="background:var(--accent)"></i>50% of max captured</span>
+      <span><i class="sw" style="background:rgba(228,234,242,.75)"></i>where SPX is now</span>
     </div>
   </section>
 
@@ -506,7 +511,7 @@ function tint(p){
 }
 function rows(){
   const lo=Math.floor((S.kl-W()*0.30)/5)*5;
-  let hi=Math.ceil(Math.max(S.spot*1.005,S.ks+W()*0.40)/5)*5;
+  let hi=Math.ceil(Math.max(S.spot*1.005,S.ks+W()*0.40,Math.round(S.spot/5)*5+10)/5)*5;
   if((hi-lo)/5>200) hi=lo+1000;
   const out=[]; for(let p=hi;p>=lo;p-=5) out.push(p);
   return out;
@@ -520,10 +525,13 @@ function cols(){
 function matrix(){
   const R=rows(),C=cols(),half=maxP()*.5;
   let h='<thead><tr><th class="pxcol">SPX</th>'+C.map(c=>`<th>${c}d</th>`).join('')+'</tr></thead><tbody>';
+  const spotRow=Math.round(S.spot/5)*5;
   R.forEach(px=>{
-    const isS=Math.abs(px-S.ks)<2.5,isL=Math.abs(px-S.kl)<2.5;
-    const tag=isS?'<span class="tag">SHORT</span>':isL?'<span class="tag">LONG</span>':'';
-    h+=`<tr class="${isS?'kShort':''}${isL?'kLong':''}"><td class="pxcol">${px.toLocaleString()}${tag}</td>`;
+    const isS=Math.abs(px-S.ks)<2.5,isL=Math.abs(px-S.kl)<2.5,isSp=px===spotRow;
+    const tag=isS?'<span class="tag">SHORT</span>':isL?'<span class="tag">LONG</span>'
+             :isSp?'<span class="tag">SPOT '+S.spot.toFixed(2)+'</span>':'';
+    const cls=[isS?'kShort':'',isL?'kLong':'',isSp?'kSpot':''].filter(Boolean).join(' ');
+    h+=`<tr class="${cls}"><td class="pxcol">${px.toLocaleString()}${tag}</td>`;
     let marked=false;
     C.forEach(c=>{
       const p=pnlAt(px,c),t=tint(p);
