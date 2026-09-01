@@ -33,6 +33,21 @@ section{margin-bottom:22px}
 .shead{display:flex;align-items:baseline;gap:9px;margin-bottom:9px;flex-wrap:wrap}
 .shead h2{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase}
 .shead .note{font-size:11.5px;color:var(--dim)}
+.drop{border:1.5px dashed var(--line2);border-radius:8px;padding:16px;margin-bottom:12px;
+  text-align:center;cursor:pointer;transition:.15s;background:var(--panel);display:block}
+.drop:hover,.drop.over{border-color:var(--accent);background:rgba(233,163,58,.05)}
+.drop .big{font-family:var(--mono);font-size:12.5px;color:var(--text);margin-bottom:3px}
+.drop .sm{font-size:11.5px;color:var(--dim);line-height:1.5}
+.drop.busy{border-color:var(--accent);cursor:wait}
+.drop input{display:none}
+.dres{margin-bottom:12px;border-radius:7px;padding:11px 13px;font-size:12.5px;line-height:1.55;display:none}
+.dres.show{display:block}
+.dres.ok{background:rgba(53,201,138,.08);border:1px solid rgba(53,201,138,.35);color:var(--muted)}
+.dres.warn{background:rgba(233,163,58,.08);border:1px solid rgba(233,163,58,.4);color:var(--muted)}
+.dres.err{background:rgba(238,95,107,.08);border:1px solid rgba(238,95,107,.4);color:var(--muted)}
+.dres b{color:var(--text)}
+.dres .got{font-family:var(--mono);font-size:11.5px;margin-top:7px;color:var(--accent)}
+.dres .miss{font-family:var(--mono);font-size:11.5px;margin-top:5px;color:var(--loss)}
 .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 .preset{background:var(--panel);border:1px solid var(--line);color:var(--muted);font-family:var(--mono);
   font-size:11px;padding:7px 10px;border-radius:5px;cursor:pointer;transition:.14s}
@@ -172,6 +187,14 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 <!-- ================= TAB 1 ================= -->
 <div class="pane on" id="pane-week">
   <section>
+    <div class="shead"><h2>Import a screenshot</h2><span class="note">optional — fills the fields below</span></div>
+    <label class="drop" id="drop">
+      <input type="file" id="dropfile" accept="image/*">
+      <div class="big">Drop an options chain screenshot here, or tap to choose</div>
+      <div class="sm">Reads the strikes, IVs, credit and contracts. Always check the numbers against your broker before trading on them.</div>
+    </label>
+    <div class="dres" id="dres"></div>
+
     <div class="shead"><h2>Presets</h2><span class="note">your open trade, and the widths we compared</span></div>
     <div class="presets" id="presets"></div>
     <div class="shead"><h2>Position</h2></div>
@@ -282,7 +305,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 </div>
 
 <div class="blk">
-  <h3 class="neg">The Fed & Rates</h3>
+  <h3 class="neg">The Fed &amp; Rates</h3>
   <div class="tag">Hike odds surge on hot inflation talk</div>
   <p>On Aug 28, at the Fed's Jackson Hole symposium, Chairman Kevin Warsh warned about sticky inflation, after which CME's FedWatch tool showed a 57.5% probability of a 25 basis-point hike to 3.75-4% in September.</p>
   <p>By Tuesday morning, Schwab reported that chances of a rate hike at the Fed's September meeting reached 66% today, according to the CME FedWatch Tool, up from 40% a week ago.</p>
@@ -290,9 +313,9 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 </div>
 
 <div class="blk">
-  <h3>AI & Tech</h3>
+  <h3>AI &amp; Tech</h3>
   <div class="tag">Data-center boom meets a rough stock year</div>
-  <p>Barclays' Stefano Pascale said "Big Tech (Mag7 ex-Tesla) has lagged the S & P through the vast majority of 2026," adding that the group has underperformed the S&P 500 for 92% of the year to date, putting it on pace for one of its worst 12-month periods since 2013, second only to 2022.</p>
+  <p>Barclays' Stefano Pascale said "Big Tech (Mag7 ex-Tesla) has lagged the S &amp; P through the vast majority of 2026," adding that the group has underperformed the S&P 500 for 92% of the year to date, putting it on pace for one of its worst 12-month periods since 2013, second only to 2022.</p>
   <p>Even so, capital spending on AI infrastructure keeps rising: the Magnificent Seven alone are expected to deploy $527 billion in AI/data center capital expenditures in fiscal 2026, up $62 billion from prior estimates.</p>
   <p>Traders are also weighing an intensifying domestic debate over AI data centers, per Benzinga, alongside a leadership change at Apple, where shares rose this morning as John Ternus succeeds Tim Cook as CEO.</p>
 </div>
@@ -915,6 +938,78 @@ $('modes').addEventListener('click',e=>{
 });
 
 build(); draw();
+
+/* ===== screenshot import ===== */
+const PARSER_URL = "https://spx-parser.sevechong.workers.dev";
+const FIELD_LABEL = {spot:'SPX spot', dte:'DTE', ks:'short strike', kl:'long strike',
+                     ivs:'short IV', ivl:'long IV', credit:'credit', qty:'contracts'};
+function dmsg(cls, html){
+  const el=$('dres'); el.className='dres show '+cls; el.innerHTML=html;
+}
+async function parseShot(file){
+  if(!file) return;
+  if(!/^https:\/\/[a-z0-9.-]+\.workers\.dev/.test(PARSER_URL)){
+    dmsg('err','<b>Parser not configured.</b> Enter your numbers by hand below.');
+    return;
+  }
+  const drop=$('drop');
+  drop.classList.add('busy');
+  dmsg('warn','<b>Reading the screenshot&hellip;</b> usually five to ten seconds.');
+  try{
+    const b64 = await new Promise((res,rej)=>{
+      const r=new FileReader();
+      r.onload=()=>res(String(r.result).split(',')[1]);
+      r.onerror=()=>rej(new Error('Could not read that file'));
+      r.readAsDataURL(file);
+    });
+    const resp = await fetch(PARSER_URL,{method:'POST',
+      headers:{'content-type':'application/json'},
+      body: JSON.stringify({image:b64, media_type:file.type||'image/png'})});
+    const data = await resp.json();
+    if(!resp.ok){
+      dmsg('err','<b>'+(data.error||'Something went wrong')+'</b>'+
+        (data.detail?'<div class="miss">'+String(data.detail).replace(/</g,'&lt;')+'</div>':''));
+      return;
+    }
+    const got=[], missing=[];
+    for(const k of ['spot','dte','ks','kl','ivs','ivl','credit','qty']){
+      const v=data[k];
+      if(v===null||v===undefined||!isFinite(v)){ missing.push(FIELD_LABEL[k]); continue; }
+      S[k]=+v; got.push(FIELD_LABEL[k]+' '+v);
+    }
+    if(!got.length){
+      dmsg('err','<b>Nothing readable in that image.</b>'+
+        (data.notes?'<div class="miss">'+data.notes+'</div>':''));
+      return;
+    }
+    if(S.ks<S.kl){ const t=S.ks; S.ks=S.kl; S.kl=t; }
+    build(); draw();
+    dmsg(missing.length?'warn':'ok',
+      '<b>Filled '+got.length+' field'+(got.length===1?'':'s')+'.</b> '+
+      'Check every number against your broker before you act on it.'+
+      '<div class="got">'+got.join(' &middot; ')+'</div>'+
+      (missing.length?'<div class="miss">still needs: '+missing.join(', ')+'</div>':'')+
+      (data.notes?'<div class="miss">'+data.notes+'</div>':''));
+  }catch(e){
+    dmsg('err','<b>Could not reach the parser.</b> '+e.message+' &mdash; enter the numbers by hand below.');
+  }finally{ drop.classList.remove('busy'); }
+}
+$('dropfile').addEventListener('change',e=>{ parseShot(e.target.files[0]); e.target.value=''; });
+['dragenter','dragover'].forEach(ev=>$('drop').addEventListener(ev,e=>{
+  e.preventDefault(); $('drop').classList.add('over');}));
+['dragleave','drop'].forEach(ev=>$('drop').addEventListener(ev,e=>{
+  e.preventDefault(); $('drop').classList.remove('over');}));
+$('drop').addEventListener('drop',e=>{
+  const f=e.dataTransfer.files&&e.dataTransfer.files[0];
+  if(f&&f.type.startsWith('image/')) parseShot(f);
+});
+document.addEventListener('paste',e=>{
+  if(!$('pane-week').classList.contains('on')) return;
+  for(const it of (e.clipboardData&&e.clipboardData.items)||[]){
+    if(it.type.startsWith('image/')){ parseShot(it.getAsFile()); break; }
+  }
+});
+
 </script>
 </body>
 </html>
