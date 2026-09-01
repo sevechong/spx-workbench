@@ -22,7 +22,8 @@ import urllib.request
 import urllib.error
 
 MODEL = "claude-sonnet-5"
-MAX_TOKENS = 8000
+MAX_TOKENS = 20000
+MAX_TURNS = 12
 INDEX = "index.html"
 START = "<!-- BRIEF:START -->"
 END = "<!-- BRIEF:END -->"
@@ -103,17 +104,7 @@ Rules:
 """
 
 
-def call_api(prompt: str) -> str:
-    key = os.environ.get("ANTHROPIC_API_KEY")
-    if not key:
-        sys.exit("ANTHROPIC_API_KEY is not set.")
-
-    payload = {
-        "model": MODEL,
-        "max_tokens": MAX_TOKENS,
-        "messages": [{"role": "user", "content": prompt}],
-        "tools": [{"type": "web_search_20250305", "name": "web_search"}],
-    }
+def _post(payload: dict, key: str) -> dict:
     req = urllib.request.Request(
         "https://api.anthropic.com/v1/messages",
         data=json.dumps(payload).encode(),
@@ -124,24 +115,79 @@ def call_api(prompt: str) -> str:
         },
     )
     try:
-        with urllib.request.urlopen(req, timeout=300) as r:
-            data = json.loads(r.read())
+        with urllib.request.urlopen(req, timeout=600) as r:
+            return json.loads(r.read())
     except urllib.error.HTTPError as e:
-        sys.exit(f"API error {e.code}: {e.read().decode()[:600]}")
+        sys.exit(f"API error {e.code}: {e.read().decode()[:800]}")
 
-    # keep only text blocks; ignore tool_use / tool_result
-    parts = [b.get("text", "") for b in data.get("content", []) if b.get("type") == "text"]
-    return "\n".join(p for p in parts if p).strip()
+
+def call_api(prompt: str) -> str:
+    """
+    Server-side web search can return stop_reason='pause_turn' when the model is
+    mid-research. The response has to be handed back so it can carry on. Without
+    this loop you get search results and no prose.
+    """
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        sys.exit("ANTHROPIC_API_KEY is not set.")
+
+    messages = [{"role": "user", "content": prompt}]
+    collected = []
+
+    for turn in range(1, MAX_TURNS + 1):
+        data = _post({
+            "model": MODEL,
+            "max_tokens": MAX_TOKENS,
+            "messages": messages,
+            "tools": [{"type": "web_search_20250305", "name": "web_search"}],
+        }, key)
+
+        stop = data.get("stop_reason")
+        blocks = data.get("content", [])
+        kinds = {}
+        for b in blocks:
+            kinds[b.get("type")] = kinds.get(b.get("type"), 0) + 1
+        text_now = "".join(b.get("text", "") for b in blocks if b.get("type") == "text")
+        collected.append(text_now)
+
+        print(f"  turn {turn}: stop_reason={stop} blocks={kinds} "
+              f"text={len(text_now)} chars")
+
+        if stop == "pause_turn":
+            # hand the whole assistant turn back so research continues
+            messages = messages + [{"role": "assistant", "content": blocks}]
+            continue
+
+        if stop == "max_tokens":
+            print("  ! hit max_tokens - output truncated; raise MAX_TOKENS "
+                  "or ask for a shorter brief")
+        break
+    else:
+        print(f"  ! gave up after {MAX_TURNS} turns")
+
+    return "".join(collected).strip()
 
 
 def clean(fragment: str) -> str:
-    """Strip code fences and any stray preamble before the first div."""
+    """Strip fences, drop any preamble, and close tags left open by truncation."""
     f = fragment.strip()
     for fence in ("```html", "```HTML", "```"):
         f = f.replace(fence, "")
     i = f.find("<div")
     if i > 0:
         f = f[i:]
+    f = f.strip()
+
+    # a truncated run can end mid-tag; cut back to the last complete one
+    if f.rfind(">") < f.rfind("<"):
+        f = f[:f.rfind("<")].rstrip()
+
+    # drop a trailing partial element that never got its closing tag
+    open_divs = f.count("<div") - f.count("</div>")
+    if 0 < open_divs <= 6:
+        f = f + ("\n</div>" * open_divs)
+        print(f"  repaired {open_divs} unclosed <div> from truncation")
+
     return f.strip()
 
 
