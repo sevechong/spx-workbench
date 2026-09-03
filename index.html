@@ -255,6 +255,10 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .cal .when{color:var(--accent);flex:0 0 auto;min-width:104px}
 .cal .what{flex:1 1 190px;color:var(--muted);min-width:0;overflow-wrap:anywhere}
 .cal .imp{flex:0 0 auto;color:var(--dim);font-size:10.5px;margin-left:auto}
+.cal .row.past{opacity:.42}
+.cal .row.past .when{color:var(--dim)}
+.cal .rel{font-size:10.5px;margin-left:6px;color:var(--accent)}
+.cal .row.past .rel{color:var(--dim)}
 @media(max-width:520px){
   .cal .when{flex:1 0 100%}
   .cal .imp{margin-left:0}
@@ -436,12 +440,12 @@ svg{display:block;width:100%;height:auto;overflow:visible}
   <h3 class="acc">Calendar</h3>
   <div class="tag">Two weeks of data and earnings ahead</div>
   <div class="cal">
-    <div class="row"><span class="when">Sep 1 (today)</span><span class="what">JOLTS Job Openings and August ISM Manufacturing PMI</span><span class="imp">Medium</span></div>
-    <div class="row"><span class="when">Sep 2</span><span class="what">Broadcom, Salesforce, and Snowflake earnings; Dollar Tree reports before the open</span><span class="imp">Medium</span></div>
-    <div class="row"><span class="when">Sep 4</span><span class="what">August jobs report (nonfarm payrolls and unemployment rate)</span><span class="imp">High</span></div>
-    <div class="row"><span class="when">Week of Sep 7</span><span class="what">European Central Bank policy meeting</span><span class="imp">Medium</span></div>
-    <div class="row"><span class="when">Sep 11</span><span class="what">August CPI inflation report</span><span class="imp">High</span></div>
-    <div class="row"><span class="when">Sep 16</span><span class="what">FOMC interest-rate decision, 2:00 PM ET</span><span class="imp">High</span></div>
+    <div class="row" data-date="2026-09-01"><span class="when">Sep 1</span><span class="what">JOLTS Job Openings and August ISM Manufacturing PMI</span><span class="imp">Medium</span></div>
+    <div class="row" data-date="2026-09-02"><span class="when">Sep 2</span><span class="what">Broadcom, Salesforce, and Snowflake earnings; Dollar Tree reports before the open</span><span class="imp">Medium</span></div>
+    <div class="row" data-date="2026-09-04"><span class="when">Sep 4</span><span class="what">August jobs report (nonfarm payrolls and unemployment rate)</span><span class="imp">High</span></div>
+    <div class="row" data-date="2026-09-07"><span class="when">Week of Sep 7</span><span class="what">European Central Bank policy meeting</span><span class="imp">Medium</span></div>
+    <div class="row" data-date="2026-09-11"><span class="when">Sep 11</span><span class="what">August CPI inflation report</span><span class="imp">High</span></div>
+    <div class="row" data-date="2026-09-16"><span class="when">Sep 16</span><span class="what">FOMC interest-rate decision, 2:00 PM ET</span><span class="imp">High</span></div>
   </div>
 </div>
 
@@ -1012,6 +1016,33 @@ S._t = S._t || {};
 LIVE_KEYS.forEach(k => { if(!S._t[k]) S._t[k] = Date.now(); });
 build(); draw();
 if(!hadSaved) savePos();
+
+/* ===== calendar: relative labels computed now, not baked in =====
+   The brief is generated once and may sit for days, so anything like "today"
+   written into the text goes stale. These are worked out from the real date. */
+function dateCal(){
+  const rows=document.querySelectorAll('#pane-brief .cal .row[data-date]');
+  if(!rows.length) return;
+  const t=new Date(todayISO()+'T00:00:00');
+  rows.forEach(r=>{
+    const d=new Date(r.dataset.date+'T00:00:00');
+    if(isNaN(d)) return;
+    const days=Math.round((d-t)/864e5);
+    r.classList.toggle('past', days<0);
+    const old=r.querySelector('.rel'); if(old) old.remove();
+    let txt='';
+    if(days<0)       txt = days===-1 ? 'yesterday' : Math.abs(days)+' days ago';
+    else if(days===0)txt = 'today';
+    else if(days===1)txt = 'tomorrow';
+    else if(days<=7) txt = 'in '+days+' days';
+    if(txt){
+      const el=document.createElement('span');
+      el.className='rel'; el.textContent=txt;
+      r.querySelector('.when').after(el);
+    }
+  });
+}
+dateCal();
 
 /* ===== screenshot import ===== */
 const PARSER_URL = "https://spx-parser.sevechong.workers.dev";
