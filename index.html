@@ -48,9 +48,9 @@ section{margin-bottom:22px}
 .dres b{color:var(--text)}
 .dres .got{font-family:var(--mono);font-size:11.5px;margin-top:7px;color:var(--accent)}
 .dres .miss{font-family:var(--mono);font-size:11.5px;margin-top:5px;color:var(--loss)}
-.acts{background:none;border:1px dashed var(--line2);border-radius:6px;padding:8px 10px;
-  display:flex;flex-direction:column;justify-content:center;gap:7px}
-.acts button{width:100%;background:var(--panel2);border:1px solid var(--line2);color:var(--muted);
+.acts{grid-column:span 2;background:none;border:1px dashed var(--line2);border-radius:6px;
+  padding:8px 10px;display:flex;align-items:stretch;gap:8px}
+.acts button{flex:1;background:var(--panel2);border:1px solid var(--line2);color:var(--muted);
   font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:8px 6px;border-radius:5px;
   cursor:pointer;transition:.14s}
 .acts .save:hover{border-color:var(--profit);color:var(--profit)}
@@ -79,6 +79,8 @@ section{margin-bottom:22px}
   border-radius:7px;padding:12px 14px;margin-bottom:12px}
 .vixcard.warn{border-left-color:var(--accent)}
 .vixcard.fire{border-left-color:var(--loss);background:rgba(238,95,107,.06)}
+.vixcard.dim{border-left-color:var(--dim);opacity:.62}
+.vixcard.dim .vixfill{background:var(--dim)}
 .vixcard.pt{border-left-color:var(--muted)}
 .vixcard.pt.near{border-left-color:var(--accent)}
 .vixcard.pt.done{border-left-color:var(--profit);background:rgba(53,201,138,.06)}
@@ -101,12 +103,27 @@ section{margin-bottom:22px}
 .vixnums b.up{color:var(--loss)} .vixnums b.down{color:var(--profit)}
 .vixnums span{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
   text-transform:uppercase;color:var(--dim)}
+.stalenote{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.03em}
+.stalenote.stale-warn{color:var(--accent)}
+.stalenote.stale-bad{color:var(--loss);font-weight:600}
+.sb-age{font-family:var(--mono);font-size:9.5px;font-style:normal;color:var(--accent);margin-left:5px}
 .vixbar{height:5px;border-radius:3px;background:var(--line);overflow:hidden}
 .vixfill{height:100%;background:var(--profit);transition:width .3s}
 .vixcard.warn .vixfill{background:var(--accent)}
 .vixcard.fire .vixfill{background:var(--loss)}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(min-width:660px){.grid{grid-template-columns:repeat(4,1fr)}}
+/* narrow: short pair, long pair, then context.
+   wide: spot+expiry move up to row 1 so short sits directly above long. */
+@media(min-width:660px){
+  #inputs>*{order:20}
+  #inputs .f[data-f=ks]{order:1}      #inputs .f[data-f=ivs]{order:2}
+  #inputs .f[data-f=spot]{order:3}    #inputs .f[data-f=expiry]{order:4}
+  #inputs .f[data-f=kl]{order:5}      #inputs .f[data-f=ivl]{order:6}
+  #inputs .f[data-f=credit]{order:7}  #inputs .f[data-f=qty]{order:8}
+  #inputs .acts{order:99}
+}
 .f{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
 .f label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
 .f input,.f select{width:100%;background:none;border:none;color:var(--text);font-family:var(--mono);font-size:15px;outline:none}
@@ -357,76 +374,86 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 <div class="pane" id="pane-brief" style="min-width:0">
   <!-- BRIEF:START -->
 <div class="stale">
-  AUTO-GENERATED 3 Sep 2026, 7:25am ET. Researched by Claude from public reporting and not reviewed by a human before publishing. Verify anything you intend to act on.
+  AUTO-GENERATED 1 Sep 2026, 5:20pm ET. Researched by Claude from public reporting and not reviewed by a human before publishing. Verify anything you intend to act on.
 </div>
 
 <div class="tldr">
   <h3>The short version</h3>
   <ul>
-    <li>The <b>S&P 500 is choppy but still near its recent highs</b>, having snapped a three-day losing run on Wednesday.</li>
-    <li>The overnight headline is a <b>fresh US-Iran flare-up</b>, with missiles hitting Jordan, the UAE, and Kuwait.</li>
-    <li>Traders are now pricing <b>meaningfully higher odds of a Fed rate hike</b> in September, a reversal from earlier cut bets.</li>
-    <li>The <b>10-year Treasury yield touched its highest level since late 2023</b>, a headwind for pricier growth stocks.</li>
-    <li><b>Big Tech has quietly lagged the broader market</b> most of 2026, even as AI infrastructure spending keeps climbing.</li>
-    <li><b>Energy remains the market's strongest sector this year</b>, while technology and communication services trail behind.</li>
-    <li>The <b>VIX "fear gauge" has eased back toward the mid-teens</b>, even with the Middle East back in focus.</li>
-    <li>Watch <b>Friday's jobs report and next week's CPI print</b> — both land before the Fed's September 15–16 meeting.</li>
+    <li><b>Stocks fell for a second straight session</b> as renewed fighting between the U.S. and Iran pushed oil prices and bond yields higher.</li>
+    <li><b>Two oil tankers were hit</b> near the Strait of Hormuz, reigniting a six-month U.S.-Iran conflict traders call a stalemate.</li>
+    <li><b>Odds of a Fed rate hike this month jumped to 66%</b>, up from 40% a week earlier, after hawkish comments from the Fed chair.</li>
+    <li><b>Bond yields are near multi-year highs</b>, with the 10-year close to 4.8% and the 30-year spending unusually long stretches above 5%.</li>
+    <li><b>Big Tech has quietly had a rough year</b>, lagging the broader S&P 500 for most of 2026 by Barclays' count.</li>
+    <li><b>Energy and healthcare stocks are near highs</b> while travel, casino, and consumer-discretionary names are hitting 52-week lows.</li>
+    <li><b>AI data-center spending keeps climbing</b> even as several stocks built around that boom swing sharply day to day.</li>
+    <li><b>September has historically been Wall Street's weakest month</b>, and this year's midterm elections add another layer of uncertainty.</li>
   </ul>
 </div>
 
 <div class="snap">
-  <div class="sn"><div class="k">S&P 500</div><div class="v">7,666.60</div><div class="c pos">+0.46%</div></div>
-  <div class="sn"><div class="k">Nasdaq</div><div class="v">26,217.83</div><div class="c pos">+0.45%</div></div>
-  <div class="sn"><div class="k">VIX</div><div class="v acc">15.20</div><div class="c neg">-6.98%</div></div>
-  <div class="sn"><div class="k">10Y Yield</div><div class="v">4.78%</div><div class="c neg">-0.04</div></div>
-  <div class="sn"><div class="k">Crude (WTI)</div><div class="v">$90.80</div><div class="c pos">+0.64%</div></div>
-  <div class="sn"><div class="k">FOMC Odds (Sep 16)</div><div class="v acc">~68% hike</div><div class="c neg">up from near-zero pre-Jackson Hole</div></div>
+  <div class="sn"><div class="k">S&P 500</div><div class="v">7,631.47</div><div class="c neg">-0.71%</div></div>
+  <div class="sn"><div class="k">Nasdaq</div><div class="v">26,099.77</div><div class="c neg">-1.03%</div></div>
+  <div class="sn"><div class="k">VIX</div><div class="v acc">15.88</div><div class="c neg">+6.43%</div></div>
+  <div class="sn"><div class="k">10Y Yield</div><div class="v">4.77%</div><div class="c">+0.01</div></div>
+  <div class="sn"><div class="k">Crude (WTI)</div><div class="v">$88.29</div><div class="c neg">+2.95%</div></div>
+  <div class="sn"><div class="k">FOMC (Sep 16) Hike Odds</div><div class="v acc">66%</div><div class="c neg">vs 40% a week ago</div></div>
 </div>
 
 <div class="blk">
-  <h3 class="neg">Middle East tensions flare again</h3>
-  <div class="tag">Iran conflict re-escalates overnight</div>
-  <p>Iran targeted U.S. allies Jordan, the United Arab Emirates and Kuwait with missiles and drones overnight in retaliation for the latest round of American airstrikes, which the U.S. military said struck Iranian military targets, per CBS News. Ahead of the open, the Polymarket contract on whether the S&P 500 opens higher on September 3 reflected only a 41% chance of a higher open, a bearish lean among prediction-market bettors.</p>
-  <p>Capital.com's Daniela Hathorn said the latest exchange of strikes has brought the Middle East firmly back into market focus, with fighting extending across the Gulf and renewed disruption around the Strait of Hormuz. She framed the risk in inflation terms, arguing oil has rebuilt some of its geopolitical premium, adding another inflation-relevant headache just as markets debate whether U.S. rates need to move higher.</p>
-  <p>Zooming out, BlackRock's Investment Institute has noted markets have been remarkably resilient to this year's geopolitical shocks, even though the underlying risks haven't disappeared. Similarly, Russell Investments pointed out the S&P 500 recovered its initial decline from an earlier Iran conflict scare in under three months before reaching new highs.</p>
+  <h3 class="neg">Geopolitics</h3>
+  <div class="tag">Iran conflict reignites, oil spikes</div>
+  <p>Stocks were falling and oil prices were rising amid renewed U.S.-Iran hostilities in the Strait of Hormuz, after two oil tankers, one Saudi and one South Korean-owned, were hit by projectiles as the U.S. and Iran resumed hostilities in a six-month war that appears to be locked in a stalemate.</p>
+  <p>President Trump threatened further strikes against Iran after Tehran launched missiles at two U.S. vessels, according to Benzinga, keeping the conflict in headlines through Tuesday's session.</p>
+  <p>Strikes between the US and Iran in the Persian Gulf prolonged the suspension of energy exports from the region and added to pro-inflationary risks on the global economy, consolidating the likelihood that major central banks are due to restart their hiking cycles this year.</p>
 </div>
 
 <div class="blk">
-  <h3 class="acc">The Fed: hike odds, not cut odds</h3>
-  <div class="tag">A hawkish shift since Jackson Hole</div>
-  <p>On Aug 28, at the Fed's annual Jackson Hole symposium, Chair Kevin Warsh warned about sticky inflation, and in the aftermath, the CME FedWatch tool showed a 68% probability the central bank raises the fed funds rate by 25 basis points to 3.75–4% in September, a sharp reversal from earlier easing bets.</p>
-  <p>That follows a hold: the FOMC voted 9-3 to keep the federal funds rate at 3.50%-3.75% at its July 2026 meeting. The Federal Reserve has confirmed the next FOMC meeting runs September 15–16, 2026, with updated economic projections due alongside the statement.</p>
-  <p>The benchmark 10-year Treasury yield hit a high of 4.818% on Wednesday, a level not seen since November 2023. Barclays strategists have tied that yield move directly to equity pain, noting megacap tech stocks are again lagging the overall market as yields climb, threatening to compress equity valuation multiples.</p>
+  <h3 class="neg">The Fed &amp; Rates</h3>
+  <div class="tag">Hike odds surge on hot inflation talk</div>
+  <p>On Aug 28, at the Fed's Jackson Hole symposium, Chairman Kevin Warsh warned about sticky inflation, after which CME's FedWatch tool showed a 57.5% probability of a 25 basis-point hike to 3.75-4% in September.</p>
+  <p>By Tuesday morning, Schwab reported that chances of a rate hike at the Fed's September meeting reached 66% today, according to the CME FedWatch Tool, up from 40% a week ago.</p>
+  <p>Treasury yields are now a stone's throw from 5% for the 10-year note, and the 30-year yield has spent 55 days above 5% so far this year, the most in any year since 2006.</p>
 </div>
 
 <div class="blk">
-  <h3>AI trade: chips lag, infrastructure builds</h3>
-  <div class="tag">Capex still rising, stock reactions diverge</div>
-  <p>Barclays' Stefano Pascale found the "Magnificent Seven" ex-Tesla have underperformed the S&P 500 for 92% of the year to date, putting Big Tech on pace for one of its worst 12-month stretches since 2013. His conclusion: "multiple compression has been the primary driver of Big Tech's underperformance this year."</p>
-  <p>Yet the AI buildout itself looks undented. Vertiv's second-quarter net sales rose 24% year over year to $3.274 billion, with adjusted operating margin expanding 410 basis points, while GE Vernova has seen its stock surge over 75% in 2026 on massive data-center power orders, pushing its backlog to $76 billion. Nvidia itself has told investors it expects capital expenditures from the top five hyperscalers to reach nearly $800 billion in 2026 and $1.3 trillion in 2027.</p>
-  <p>The political wrinkle is local, not macro: commentary highlighted by Jim Cramer argues underlying demand for AI compute keeps growing, and the real constraint is supply-side — securing permits, power connections, and community approval for new facilities, not any pullback in appetite for AI itself.</p>
+  <h3>AI &amp; Tech</h3>
+  <div class="tag">Data-center boom meets a rough stock year</div>
+  <p>Barclays' Stefano Pascale said "Big Tech (Mag7 ex-Tesla) has lagged the S &amp; P through the vast majority of 2026," adding that the group has underperformed the S&P 500 for 92% of the year to date, putting it on pace for one of its worst 12-month periods since 2013, second only to 2022.</p>
+  <p>Even so, capital spending on AI infrastructure keeps rising: the Magnificent Seven alone are expected to deploy $527 billion in AI/data center capital expenditures in fiscal 2026, up $62 billion from prior estimates.</p>
+  <p>Traders are also weighing an intensifying domestic debate over AI data centers, per Benzinga, alongside a leadership change at Apple, where shares rose this morning as John Ternus succeeds Tim Cook as CEO.</p>
 </div>
 
 <div class="blk">
-  <h3>Energy leads, Big Tech and cyclicals lag</h3>
-  <div class="tag">Sector leadership and breadth</div>
-  <p>The clearest 2026 pattern hasn't changed: eight of 11 S&P sectors are higher so far this year, with energy leading at up 43%, while consumer discretionary is the laggard, down 2.3%. Over the current quarter, six of 11 sectors are higher, energy again leading at up 22%, with industrials lagging, down 7%.</p>
-  <p>Underneath the daily moves, Wednesday's rebound was notable: financials and technology shares recovered after rising Treasury yields in recent sessions had weighed on credit-sensitive sectors, with Nvidia, American Express and Walt Disney leading the Dow's gainers.</p>
-  <p>Concentration remains a structural feature to watch: Morgan Stanley notes the 10 largest stocks in the S&P 500 account for about 40% of its total value, so any disappointment in earnings could quickly knock the market off balance.</p>
+  <h3>Market Internals</h3>
+  <div class="tag">Energy leads YTD, tech lags today</div>
+  <p>Eight of the 11 S&P sectors are higher so far in 2026, with energy leading, up 43%, while Consumer Discretionary is lagging, down 2.3%.</p>
+  <p>Within Tuesday's session, communication and consumer defensive stocks are leading sector gainers, while technology and industrials are underperforming.</p>
+  <p>Breadth was weak: the S&P 500 had 12 companies with 52-week lows and seven with 52-week highs on Tuesday, and Nike valued at $38.07, a level the athletic retailer hasn't traded at in over twenty years, while travel and casino names including Wynn Resorts, Las Vegas Sands, VICI Properties and Carnival hit new lows, even as healthcare names like Pfizer and energy names notched new highs.</p>
 </div>
 
 <div class="blk">
-  <h3>Two-week economic calendar</h3>
-  <div class="tag">Data and Fed dates worth marking</div>
+  <h3 class="acc">Calendar</h3>
+  <div class="tag">Two weeks of data and earnings ahead</div>
   <div class="cal">
-    <div class="row"><span class="when">Thu, Sep 3</span><span class="what">ISM Non-Manufacturing (Services) PMI</span><span class="imp">Medium</span></div>
-    <div class="row"><span class="when">Fri, Sep 4</span><span class="what">August jobs report (Employment Situation)</span><span class="imp">High</span></div>
-    <div class="row"><span class="when">Wed, Sep 10</span><span class="what">Producer Price Index (August)</span><span class="imp">Medium</span></div>
-    <div class="row"><span class="when">Thu, Sep 11</span><span class="what">Consumer Price Index (August)</span><span class="imp">High</span></div>
-    <div class="row"><span class="when">Tue–Wed, Sep 15–16</span><span class="what">FOMC meeting and rate decision</span><span class="imp">High</span></div>
-    <div class="row"><span class="when">Thu, Sep 17</span><span class="what">Weekly jobless claims</span><span class="imp">Low</span></div>
+    <div class="row"><span class="when">Sep 1 (today)</span><span class="what">JOLTS Job Openings and August ISM Manufacturing PMI</span><span class="imp">Medium</span></div>
+    <div class="row"><span class="when">Sep 2</span><span class="what">Broadcom, Salesforce, and Snowflake earnings; Dollar Tree reports before the open</span><span class="imp">Medium</span></div>
+    <div class="row"><span class="when">Sep 4</span><span class="what">August jobs report (nonfarm payrolls and unemployment rate)</span><span class="imp">High</span></div>
+    <div class="row"><span class="when">Week of Sep 7</span><span class="what">European Central Bank policy meeting</span><span class="imp">Medium</span></div>
+    <div class="row"><span class="when">Sep 11</span><span class="what">August CPI inflation report</span><span class="imp">High</span></div>
+    <div class="row"><span class="when">Sep 16</span><span class="what">FOMC interest-rate decision, 2:00 PM ET</span><span class="imp">High</span></div>
   </div>
 </div>
+
+<div class="blk">
+  <h3>If you're selling premium</h3>
+  <div class="tag">Questions to check, not calls to make</div>
+  <p>With VIX at <b>15.88</b>, is that level pricing in a jobs report, an ECB decision, and an escalating Iran conflict all landing before the next FOMC meeting, or mainly reflecting the calmer summer that preceded it?</p>
+  <p>A 7-day expiry opened today would span roughly Sep 1–8: does that window catch the <b>August jobs report on Sep 4</b> and the Broadcom/Salesforce/Snowflake earnings cluster, while missing the <b>Sep 11 CPI print</b> and the <b>Sep 16 FOMC decision</b> entirely?</p>
+  <p>Given that September is historically the weakest month for stocks, with the S&P 500 down 0.6% on average and positive only 45% of the time, and this year's midterm elections adding another source of volatility, how does today's regime — elevated yields, a live war headline, and rising hike odds — compare to the low-volatility stretches typically used to build historical premium-selling samples?</p>
+</div>
+
+<p class="foot">Sources referenced: CNBC, Yahoo Finance/TheStreet, The Motley Fool, Charles Schwab, Zacks/Yahoo Finance, Trading Economics, Investrade, Barchart, Bloomberg, Benzinga, and FedRateCalc/TheRightTrader for scheduled economic releases. Figures are intraday/as-reported at the time of writing and may have moved since. This page is a summary of public reporting, not financial advice.</p>
   <!-- BRIEF:END -->
 
   <p class="foot">
@@ -443,11 +470,59 @@ const pctf=(v,d)=>(v>=0?'':'')+v.toFixed(d===undefined?2:d)+'%';
 const EMP={"h4_all":{"n":2517,"below":[27.97,23.957,20.461,17.322,14.263,12.197,10.33,8.86,7.708,6.277,5.364,4.926,4.092,3.536,3.059,2.781,2.463,2.026,1.907,1.589,1.311,1.112,0.993,0.834,0.795,0.755,0.715],"touch":[62.296,51.093,43.385,36.909,31.228,26.659,22.686,18.633,15.058,12.992,11.363,9.893,8.462,7.509,6.555,5.403,4.807,4.172,3.695,3.417,2.9,2.582,2.344,1.986,1.748,1.589,1.43]},"h4_calm":{"n":1737,"below":[24.986,20.322,16.35,13.356,10.593,8.808,7.139,5.872,5.009,3.685,2.763,2.36,1.957,1.67,1.382,1.151,1.036,0.691,0.633,0.518,0.461,0.288,0.288,0.23,0.23,0.173,0.173],"touch":[57.11,44.56,36.5,30.109,24.237,19.574,15.544,12.435,9.096,7.657,6.218,4.893,3.8,3.224,2.706,1.9,1.67,1.382,1.267,1.267,1.151,1.036,0.864,0.691,0.633,0.518,0.461]},"h5_all":{"n":2516,"below":[28.021,24.444,21.025,18.362,15.938,13.99,12.083,10.413,8.784,7.591,6.598,5.723,4.889,4.332,3.458,2.901,2.703,2.504,2.186,1.828,1.55,1.391,1.192,1.113,1.033,0.994,0.954],"touch":[66.017,54.809,46.94,40.382,34.857,30.286,25.994,21.741,18.442,16.216,13.951,12.44,10.93,9.817,8.188,6.916,6.121,5.525,4.65,4.293,3.895,3.378,3.14,2.822,2.544,2.266,1.987]},"h5_calm":{"n":1736,"below":[24.942,21.083,17.569,14.689,11.982,10.081,8.41,6.855,5.472,4.551,3.744,3.168,2.765,2.419,1.843,1.498,1.44,1.21,0.979,0.749,0.691,0.634,0.403,0.403,0.403,0.346,0.346],"touch":[61.002,48.502,40.15,33.41,27.88,23.214,18.664,15.092,11.924,10.138,8.065,6.74,5.703,4.781,3.859,2.938,2.535,2.247,1.786,1.786,1.613,1.498,1.267,1.037,0.922,0.806,0.749]},"otm":[0.5,0.75,1.0,1.25,1.5,1.75,2.0,2.25,2.5,2.75,3.0,3.25,3.5,3.75,4.0,4.25,4.5,4.75,5.0,5.25,5.5,5.75,6.0,6.25,6.5,6.75,7.0],"worst":{"h4_all":-17.21}};
 
 
+
+/* ===== staleness =====
+   Both trackers colour themselves from numbers the user typed. If those numbers
+   are days old the colour is a lie, so every live input carries its own timestamp. */
+const LIVE_KEYS = ['spot','curVix','markNow'];
+const STALE_WARN = 4*3600e3;    // 4 hours  - worth a nudge
+const STALE_BAD  = 24*3600e3;   // 1 day    - do not trust the colour
+
+function touch(k){
+  if(!LIVE_KEYS.includes(k)) return;
+  S._t = S._t || {};
+  S._t[k] = Date.now();
+}
+function ageOf(k){
+  const t = S._t && S._t[k];
+  return t ? Date.now() - t : null;
+}
+function ageWords(ms){
+  if(ms === null) return 'never updated';
+  const m = Math.round(ms/60000);
+  if(m < 2)   return 'just now';
+  if(m < 60)  return m + ' min ago';
+  const h = Math.round(m/60);
+  if(h < 24)  return h === 1 ? 'an hour ago' : h + ' hours ago';
+  const d = Math.round(h/24);
+  return d === 1 ? 'yesterday' : d + ' days ago';
+}
+// worst state across the keys a card depends on
+function staleness(keys){
+  let worst = 0, oldest = null, label = '';
+  for(const k of keys){
+    const a = ageOf(k);
+    if(a === null){ continue; }
+    if(a > worst){ worst = a; oldest = k; label = ageWords(a); }
+  }
+  const level = worst >= STALE_BAD ? 'bad' : worst >= STALE_WARN ? 'warn' : 'ok';
+  return {level, label, oldest, ms:worst};
+}
+function staleNote(keys, what){
+  const st = staleness(keys);
+  if(st.level === 'ok') return '';
+  const cls = st.level === 'bad' ? 'stale-bad' : 'stale-warn';
+  const msg = st.level === 'bad'
+    ? `${what} last updated ${st.label} &mdash; this reading is out of date`
+    : `${what} last updated ${st.label}`;
+  return `<div class="stalenote ${cls}">${msg}</div>`;
+}
+
 /* ===== position memory ===== */
 const STORE_KEY = 'spx_workbench_position_v1';
 const SAVED_KEYS = ['spot','ks','kl','ivs','ivl','credit','qty','dte',
                     'expiry','entryVix','curVix','vixTrig',
-                    'ptTarget','markNow','stress'];
+                    'ptTarget','markNow','stress','_t'];
 
 function savePos(){
   try{
@@ -524,7 +599,8 @@ function vixPanel(){
         <span class="vixsub">enter the VIX at entry and now to arm this</span></div></div>`;
     return;
   }
-  const tone = v.fired ? 'fire' : v.prog > 0.6 ? 'warn' : 'calm';
+  const sv = staleness(['curVix']);
+  const tone = sv.level==='bad' ? 'dim' : v.fired ? 'fire' : v.prog > 0.6 ? 'warn' : 'calm';
   const label = v.fired ? 'TRIGGERED &mdash; your rule says close'
               : v.prog > 0.6 ? 'closing in on the trigger'
               : 'within range';
@@ -539,6 +615,7 @@ function vixPanel(){
       <div><b>${v.level.toFixed(2)}</b><span>trigger &middot; +${v.trig}%</span></div>
     </div>
     <div class="vixbar"><div class="vixfill" style="width:${(v.prog*100).toFixed(1)}%"></div></div>
+    ${staleNote(['curVix'],'VIX now')}
   </div>`;
 }
 
@@ -589,7 +666,7 @@ function statusBar(){
     <span class="sb-item"><span>collected</span><b class="pos">${money(taken)}</b></span>
     <span class="sb-item"><span>at risk</span><b>${money(risk)}</b></span>
     <span class="sb-item"><span>width</span><b>${w}</b></span>
-    <span class="sb-item"><span>SPX</span><b>${(+S.spot).toLocaleString(undefined,{maximumFractionDigits:2})}</b></span>
+    <span class="sb-item"><span>SPX</span><b class="${staleness(['spot']).level==='bad'?'neg':''}">${(+S.spot).toLocaleString(undefined,{maximumFractionDigits:2})}</b>${staleness(['spot']).level!=='ok'?'<i class="sb-age">'+staleness(['spot']).label+'</i>':''}</span>
     <span class="sb-item"><span>time</span><b class="${dTone}">${dLabel}</b></span>
     <span class="sb-sep"></span>
     <span class="sb-saved" id="savedflag">saved</span>
@@ -625,7 +702,9 @@ function ptPanel(){
         <span class="vixsub">enter a credit to arm this</span></div></div>`;
     return;
   }
-  const tone  = p.hit ? 'done' : p.captured < 0 ? 'under'
+  const sp = staleness(p.useTyped?['markNow','spot']:['spot']);
+  const tone  = sp.level==='bad' ? 'dim'
+              : p.hit ? 'done' : p.captured < 0 ? 'under'
               : p.prog > 0.75 ? 'near' : 'calm';
   const label = p.hit ? 'TARGET HIT &mdash; your rule says close'
               : p.prog > 0.75 ? 'nearly there'
@@ -643,6 +722,7 @@ function ptPanel(){
       <div><b class="${p.pnl>=0?'down':'up'}">${money(p.pnl)}</b><span>of ${money(p.maxP)}</span></div>
     </div>
     <div class="vixbar"><div class="vixfill" style="width:${(p.prog*100).toFixed(1)}%"></div></div>
+    ${staleNote(p.useTyped?['markNow','spot']:['spot'], p.useTyped?'Cost to close':'SPX spot')}
   </div>`;
 }
 
@@ -695,9 +775,9 @@ const S={spot:7757.64,ks:7565,kl:7515,ivs:13.39,ivl:14.39,credit:2.00,qty:3,dte:
          rate:2.5,stress:1.0,early:1,regime:'calm'};
 let mode='pnl';
 const FIELDS=[
-  ['spot','SPX spot',''],['expiry','Expiry date',''],
   ['ks','Short strike','P'],['ivs','Short IV','%'],
   ['kl','Long strike','P'],['ivl','Long IV','%'],
+  ['spot','SPX spot',''],['expiry','Expiry date',''],
   ['credit','Credit filled','$'],['qty','Contracts',''],
   ['entryVix','VIX at entry',''],
   ['curVix','VIX now',''],['vixTrig','VIX exit trigger','% above entry'],
@@ -755,7 +835,7 @@ function build(){
     const leg=LEG[k]||'';
     const type = k==='expiry' ? 'date' : 'number';
     const step = k==='expiry' ? '' : ' step="any"';
-    return `<div class="f${leg?' leg-'+leg:''}">${qm(k)}<label>${l}</label>`
+    return `<div class="f${leg?' leg-'+leg:''}" data-f="${k}">${qm(k)}<label>${l}</label>`
       +`<input type="${type}"${step} data-k="${k}" value="${S[k]}"><span class="u" id="u-${k}">${u}</span></div>`;
   }).join('') + ACTIONS;
   $('btnsave').addEventListener('click',()=>{
@@ -914,9 +994,9 @@ $('tabs').addEventListener('click',e=>{
 document.addEventListener('input',e=>{
   const k=e.target.dataset.k; if(!k) return;
   if(k==='expiry'){ S.expiry=e.target.value; draw(); savePos(); return; }
-  if(k==='markNow'){ S.markNow=e.target.value; draw(); savePos(); return; }
+  if(k==='markNow'){ S.markNow=e.target.value; touch(k); draw(); savePos(); return; }
   const v=parseFloat(e.target.value); if(!isFinite(v)) return;
-  S[k]=v; draw(); savePos();
+  S[k]=v; touch(k); draw(); savePos();
 });
 $('modes').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b)return;
@@ -927,6 +1007,9 @@ $('modes').addEventListener('click',e=>{
 
 const hadSaved = loadPos();
 if(!S.expiry) S.expiry = nextFridayISO();
+// stamp anything that has never been timed so ages start from first use
+S._t = S._t || {};
+LIVE_KEYS.forEach(k => { if(!S._t[k]) S._t[k] = Date.now(); });
 build(); draw();
 if(!hadSaved) savePos();
 
@@ -966,7 +1049,7 @@ async function parseShot(file){
     for(const k of ['spot','dte','ks','kl','ivs','ivl','credit','qty']){
       const v=data[k];
       if(v===null||v===undefined||!isFinite(v)){ missing.push(FIELD_LABEL[k]); continue; }
-      S[k]=+v; got.push(FIELD_LABEL[k]+' '+v);
+      S[k]=+v; touch(k); got.push(FIELD_LABEL[k]+' '+v);
     }
     if(!got.length){
       dmsg('err','<b>Nothing readable in that image.</b>'+
