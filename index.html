@@ -48,6 +48,14 @@ section{margin-bottom:22px}
 .dres b{color:var(--text)}
 .dres .got{font-family:var(--mono);font-size:11.5px;margin-top:7px;color:var(--accent)}
 .dres .miss{font-family:var(--mono);font-size:11.5px;margin-top:5px;color:var(--loss)}
+.acts{background:none;border:1px dashed var(--line2);border-radius:6px;padding:8px 10px;
+  display:flex;flex-direction:column;justify-content:center;gap:7px}
+.acts button{width:100%;background:var(--panel2);border:1px solid var(--line2);color:var(--muted);
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:8px 6px;border-radius:5px;
+  cursor:pointer;transition:.14s}
+.acts .save:hover{border-color:var(--profit);color:var(--profit)}
+.acts .save.ok{border-color:var(--profit);color:var(--ground);background:var(--profit)}
+.acts .wipe:hover{border-color:var(--loss);color:var(--loss)}
 /* status strip */
 .statusbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--panel);
   border:1px solid var(--line2);border-radius:7px;padding:11px 14px;margin-bottom:12px;
@@ -63,11 +71,25 @@ section{margin-bottom:22px}
 .sb-clear{background:none;border:1px solid var(--line2);color:var(--dim);border-radius:5px;
   font-family:var(--mono);font-size:10.5px;padding:5px 9px;cursor:pointer;transition:.14s}
 .sb-clear:hover{border-color:var(--loss);color:var(--loss)}
+.trackers{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+@media(min-width:820px){.trackers{grid-template-columns:1fr 1fr;gap:12px}}
+.trackers>div>.vixcard{margin-bottom:0;height:100%}
 /* vix tracker */
 .vixcard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--profit);
   border-radius:7px;padding:12px 14px;margin-bottom:12px}
 .vixcard.warn{border-left-color:var(--accent)}
 .vixcard.fire{border-left-color:var(--loss);background:rgba(238,95,107,.06)}
+.vixcard.pt{border-left-color:var(--muted)}
+.vixcard.pt.near{border-left-color:var(--accent)}
+.vixcard.pt.done{border-left-color:var(--profit);background:rgba(53,201,138,.06)}
+.vixcard.pt.near .vixsub{color:var(--accent)}
+.vixcard.pt.done .vixsub{color:var(--profit);font-weight:600}
+.vixcard.pt .vixfill{background:var(--muted)}
+.vixcard.pt.near .vixfill{background:var(--accent)}
+.vixcard.pt.done .vixfill{background:var(--profit)}
+.vixcard.pt.under{border-left-color:var(--loss)}
+.vixcard.pt.under .vixsub{color:var(--loss)}
+.vixnums{row-gap:12px}
 .vixhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .vixttl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
 .vixsub{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
@@ -83,11 +105,6 @@ section{margin-bottom:22px}
 .vixfill{height:100%;background:var(--profit);transition:width .3s}
 .vixcard.warn .vixfill{background:var(--accent)}
 .vixcard.fire .vixfill{background:var(--loss)}
-.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.preset{background:var(--panel);border:1px solid var(--line);color:var(--muted);font-family:var(--mono);
-  font-size:11px;padding:7px 10px;border-radius:5px;cursor:pointer;transition:.14s}
-.preset:hover{border-color:var(--line2);color:var(--text)}
-.preset.on{border-color:var(--accent);color:var(--accent);background:rgba(233,163,58,.07)}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(min-width:660px){.grid{grid-template-columns:repeat(4,1fr)}}
 .f{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
@@ -134,7 +151,7 @@ section{margin-bottom:22px}
 @media(min-width:1000px){.slgrid{grid-template-columns:repeat(3,1fr)}}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(min-width:660px){.stats{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:940px){.stats{grid-template-columns:repeat(6,1fr)}}
+@media(min-width:940px){.stats{grid-template-columns:repeat(5,1fr)}}
 .st{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px}
 .st .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
 .st .v{font-family:var(--mono);font-size:17px;font-weight:600}
@@ -242,6 +259,17 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 @media(min-width:700px){.labgrid{grid-template-columns:1fr 1fr}}
 .labnote{background:var(--panel);border:1px solid var(--line2);border-radius:7px;
   padding:12px 14px;font-size:12.5px;line-height:1.6;color:var(--muted);margin-bottom:12px}
+.histline{margin-top:9px;padding:10px 12px;background:var(--panel);border:1px solid var(--line);
+  border-radius:6px;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.histline b{font-family:var(--mono);color:var(--text);font-weight:600}
+.hl-intro{margin-bottom:6px}
+.hl-list{list-style:none;margin:0 0 7px}
+.hl-list li{position:relative;padding-left:15px;margin-bottom:4px;line-height:1.55}
+.hl-list li:before{content:'';position:absolute;left:2px;top:8px;width:4px;height:4px;
+  border-radius:50%;background:var(--dim)}
+.hl-foot{color:var(--dim);font-size:12px;padding-top:6px;border-top:1px solid var(--line)}
+.histline .lead{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);display:block;margin-bottom:4px}
 .hnote{padding:10px;font-family:var(--mono);font-size:10.5px;color:var(--dim);line-height:1.5}
 .foot{font-size:11.5px;color:var(--dim);line-height:1.55;border-top:1px solid var(--line);padding-top:12px;margin-top:6px}
 .foot b{color:var(--muted);font-weight:600}
@@ -264,7 +292,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 <div class="pane on" id="pane-week">
   <section>
     <div id="statusbar"></div>
-    <div id="vixbox"></div>
+    <div class="trackers"><div id="vixbox"></div><div id="ptbox"></div></div>
 
     <div class="shead"><h2>Import a screenshot</h2><span class="note">optional — fills the fields below</span></div>
     <label class="drop" id="drop">
@@ -274,8 +302,6 @@ svg{display:block;width:100%;height:auto;overflow:visible}
     </label>
     <div class="dres" id="dres"></div>
 
-    <div class="shead"><h2>Presets</h2><span class="note">your open trade, and the widths we compared</span></div>
-    <div class="presets" id="presets"></div>
     <div class="shead"><h2>Position</h2></div>
     <div class="grid" id="inputs"></div>
   </section>
@@ -283,17 +309,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
   <section>
     <div class="shead"><h2>At a glance</h2></div>
     <div class="stats" id="stats"></div>
-  </section>
-
-  <section>
-    <div class="shead"><h2>Measured against history</h2><span class="note">2,540 SPX days · Jul 2016 – Aug 2026</span></div>
-    <div class="modes" id="empmodes">
-      <button data-t="regime" data-v="calm" class="on">Calm entries</button>
-      <button data-t="regime" data-v="all">All regimes</button>
-      <button data-t="early" data-v="1" class="on">Close 1d early</button>
-      <button data-t="early" data-v="0">Hold to expiry</button>
-    </div>
-    <div class="scroll" id="histbox"></div>
+    <div id="histline"></div>
   </section>
 
   <section>
@@ -319,22 +335,6 @@ svg{display:block;width:100%;height:auto;overflow:visible}
       <span><i class="sw" style="background:var(--loss)"></i>loss</span>
       <span><i class="sw" style="background:var(--accent)"></i>50% of max captured</span>
       <span><i class="sw" style="background:rgba(228,234,242,.75)"></i>where SPX is now</span>
-    </div>
-  </section>
-
-  <section>
-    <div class="shead"><h2>Curves</h2></div>
-    <div class="charts">
-      <div class="card">
-        <h3>Decay at current spot</h3>
-        <p class="cs">P&amp;L if SPX never moves. Shows how late your profit actually arrives.</p>
-        <svg id="c1" viewBox="0 0 340 190"></svg>
-      </div>
-      <div class="card">
-        <h3>P&amp;L across price</h3>
-        <p class="cs">Each line is a day. The curve straightens as expiry approaches — that's gamma.</p>
-        <svg id="c2" viewBox="0 0 340 190"></svg>
-      </div>
     </div>
   </section>
 
@@ -449,7 +449,8 @@ const EMP={"h4_all":{"n":2517,"below":[27.97,23.957,20.461,17.322,14.263,12.197,
 /* ===== position memory ===== */
 const STORE_KEY = 'spx_workbench_position_v1';
 const SAVED_KEYS = ['spot','ks','kl','ivs','ivl','credit','qty','dte',
-                    'expiry','entryVix','curVix','vixTrig','stress'];
+                    'expiry','entryVix','curVix','vixTrig',
+                    'ptTarget','markNow','stress'];
 
 function savePos(){
   try{
@@ -489,12 +490,22 @@ function todayISO(){
   return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
 }
 // days from today to the expiry date, or the manual DTE when no date is set
+function nextFridayISO(){
+  const d = new Date();
+  d.setDate(d.getDate() + ((5 - d.getDay() + 7) % 7 || 7));   // the coming Friday
+  return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+}
 function effDte(){
-  if(!S.expiry) return Math.max(0, S.dte);
+  if(!S.expiry) return 7;
   const t = new Date(todayISO()+'T00:00:00');
   const e = new Date(S.expiry+'T00:00:00');
-  if(isNaN(e)) return Math.max(0, S.dte);
+  if(isNaN(e)) return 7;
   return Math.max(0, Math.round((e-t)/864e5));
+}
+function expired(){
+  if(!S.expiry) return false;
+  const e = new Date(S.expiry+'T00:00:00');
+  return !isNaN(e) && e < new Date(todayISO()+'T00:00:00');
 }
 
 /* ===== VIX exit tracker ===== */
@@ -535,35 +546,95 @@ function vixPanel(){
 }
 
 /* ===== the status strip ===== */
+function expiryNote(){
+  const el = $('u-expiry'); if(!el) return;
+  if(!S.expiry){ el.textContent = 'set a date'; el.style.color = ''; return; }
+  const d = effDte();
+  el.textContent = expired() ? 'already expired'
+    : d === 0 ? 'expires today'
+    : d === 1 ? '1 day until expiry'
+    : d + ' days until expiry';
+  el.style.color = (expired() || d <= 1) ? 'var(--loss)' : '';
+}
 function statusBar(){
   const el = $('statusbar'); if(!el) return;
   const d = effDte();
   const w = Math.abs(S.ks - S.kl);
   const risk = (w - S.credit) * 100 * S.qty;
   const taken = S.credit * 100 * S.qty;
-  const dLabel = S.expiry
-    ? (d === 0 ? 'expires today' : d === 1 ? '1 day left' : d + ' days left')
-    : d + ' DTE';
-  const dTone = S.expiry && d <= 1 ? 'neg' : '';
+  const dLabel = expired() ? 'expired'
+    : d === 0 ? 'expires today'
+    : d === 1 ? '1 day left'
+    : d + ' days left';
+  const dTone = (expired() || d <= 1) ? 'neg' : '';
   el.innerHTML = `<div class="statusbar">
     <span class="sb-main">Short <b class="neg">${S.ks}</b> / long <b class="pos">${S.kl}</b>
       &nbsp;&times;&nbsp;<b>${S.qty}</b></span>
     <span class="sb-sep"></span>
     <span class="sb-item"><span>collected</span><b class="pos">${money(taken)}</b></span>
     <span class="sb-item"><span>at risk</span><b>${money(risk)}</b></span>
+    <span class="sb-item"><span>width</span><b>${w}</b></span>
     <span class="sb-item"><span>SPX</span><b>${(+S.spot).toLocaleString(undefined,{maximumFractionDigits:2})}</b></span>
     <span class="sb-item"><span>time</span><b class="${dTone}">${dLabel}</b></span>
     <span class="sb-sep"></span>
     <span class="sb-saved" id="savedflag">saved</span>
-    <button class="sb-clear" id="clearpos">New trade</button>
   </div>`;
-  $('clearpos').addEventListener('click',()=>{
-    if(confirm('Clear the saved position and start fresh?')) clearPos();
-  });
+}
+
+
+/* ===== profit target tracker ===== */
+function ptState(){
+  const cr = +S.credit, tgt = +S.ptTarget;
+  if(!isFinite(cr) || cr <= 0 || !isFinite(tgt) || tgt <= 0) return null;
+
+  // what the spread is worth now: use the typed mark if there is one, else the model
+  const modelled = spreadVal(+S.spot, effDte());
+  const typed = parseFloat(S.markNow);
+  const useTyped = isFinite(typed) && typed >= 0 && String(S.markNow) !== '';
+  const now = useTyped ? typed : modelled;
+
+  const captured = (cr - now) / cr * 100;          // % of the credit banked
+  const exitAt   = cr * (1 - tgt/100);             // buyback price the rule fires at
+  const pnl      = (cr - now) * 100 * S.qty;
+  const maxP     = cr * 100 * S.qty;
+  const prog     = Math.max(0, Math.min(1, captured / tgt));
+  return {cr, now, modelled, useTyped, captured, exitAt, pnl, maxP, tgt, prog,
+          hit: captured >= tgt};
+}
+function ptPanel(){
+  const el = $('ptbox'); if(!el) return;
+  const p = ptState();
+  if(!p){
+    el.innerHTML = `<div class="vixcard">
+      <div class="vixhead"><span class="vixttl">Profit target</span>
+        <span class="vixsub">enter a credit to arm this</span></div></div>`;
+    return;
+  }
+  const tone  = p.hit ? 'done' : p.captured < 0 ? 'under'
+              : p.prog > 0.75 ? 'near' : 'calm';
+  const label = p.hit ? 'TARGET HIT &mdash; your rule says close'
+              : p.prog > 0.75 ? 'nearly there'
+              : p.captured < 0 ? 'underwater' : 'working';
+  const src = p.useTyped ? 'your mark' : 'modelled';
+  el.innerHTML = `<div class="vixcard pt ${tone}">
+    <div class="vixhead">
+      <span class="vixttl">Profit target</span>
+      <span class="vixsub">${label}</span>
+    </div>
+    <div class="vixnums">
+      <div><b class="${p.captured>=0?'down':'up'}">${p.captured.toFixed(0)}%</b><span>captured</span></div>
+      <div><b>${p.now.toFixed(2)}</b><span>to close &middot; ${src}</span></div>
+      <div><b>${p.exitAt.toFixed(2)}</b><span>rule fires at &middot; ${p.tgt}%</span></div>
+      <div><b class="${p.pnl>=0?'down':'up'}">${money(p.pnl)}</b><span>of ${money(p.maxP)}</span></div>
+    </div>
+    <div class="vixbar"><div class="vixfill" style="width:${(p.prog*100).toFixed(1)}%"></div></div>
+  </div>`;
 }
 
 /* ===== inline help ===== */
-const HELP={"spot":"<b>Where SPX is trading right now.</b><p>Every probability and price on this tab is measured relative to this number, so a stale value quietly skews everything. A 100-point error can swing the touch probability from 19% to 54%.</p><p>Check the <b>Calibration</b> stat: if the model delta doesn't roughly match what your broker shows at the short strike, spot is the first thing to fix.</p>","dte":"<b>Calendar days until expiration.</b><p>Drives time decay. Note that most of a short spread's profit arrives in the final two days \u2014 which is also when gamma is worst. That tension is the core of the strategy.</p>","ks":"<b>The put you sell.</b><p>This is where your risk begins. Above it at expiry you keep the full credit; below it you start losing.</p><p>Further out means safer but less credit \u2014 and credit falls faster than risk does, so going further out is not the free lunch it looks like.</p>","ivs":"<b>Implied volatility at the short strike.</b><p>Read it off your broker's chain. Together with the long-leg IV it defines the skew slope the model uses.</p><p>If the Calibration delta looks wrong, nudge this until it matches your chain.</p>","kl":"<b>The put you buy for protection.</b><p>Caps your loss. The gap between the two strikes is the width.</p><p>Wider means a slower bleed \u2014 dollars lost per SPX point is <b>$100 \u00d7 contracts</b>, independent of width \u2014 but wider also ties up more capital per contract.</p>","ivl":"<b>Implied volatility at the long strike.</b><p>Normally higher than the short-strike IV, because further-OTM puts carry more implied vol. That difference is the skew.</p>","credit":"<b>What you actually collected per spread.</b><p>Use your real fill, not the mid. Everything \u2014 breakeven, ROC, expected value \u2014 anchors to this, so a modelled number here quietly flatters every result.</p>","qty":"<b>Number of spreads.</b><p>The single most powerful risk lever you have. Halving contracts halves your loss rate and your income, cleanly and symmetrically.</p><p>Width and delta only reshape risk; size actually reduces it.</p>","stress":"<b>Multiplier on the derived skew.</b><p>Skew is calculated from the two IVs you entered \u2014 how much vol rises as price falls. At 1.0 you get exactly that.</p><p>Static skew from a chain snapshot understates what happens in a real selloff, when the whole vol surface lifts. Try 1.5\u20132.0 as a stress case. At 0 you're assuming vol never moves, which flatters every downside cell.</p>","bt_qty":"<b>Starting number of contracts.</b><p>The starting balance follows from this: contracts \u00d7 width \u00d7 $100. So 4 contracts of 50-wide is $20,000.</p>","sizing":"<b>How position size changes as the account moves.</b><p><b>Fixed</b> \u2014 always the same number of contracts. Profits accumulate as idle cash. Percentages stay comparable across account sizes.</p><p><b>Full balance</b> \u2014 contracts recalculated weekly as balance \u00f7 (width \u00d7 $100). Grows with profits, shrinks after losses, and the run ends outright if the balance can't fund one contract. Treat it as a stress test, not a plan.</p>","delta":"<b>Target delta for the short put.</b><p>Roughly the probability it finishes in the money. 0.05 means about a 5% chance.</p><p>The tool searches for the strike that matches this delta each week, so the distance adjusts automatically as volatility changes.</p><p>Lower delta is not straightforwardly safer \u2014 credit falls faster than risk does, so one bad week costs more clean weeks to repay.</p>","width":"<b>Distance between the strikes, in SPX points.</b><p>Sets both max loss and the collateral each contract requires. Also sets the starting balance on this tab.</p><p>Wider spreads bleed more slowly per point but need more capital, so at a fixed account size you hold fewer of them.</p>","pt":"<b>Close the trade once you've captured this much of the credit.</b><p>At 95%, a $1.19 credit gets bought back around $0.06.</p><p>Getting out a day or two early skips the worst of the final-day gamma. In this data that single habit is worth several thousand dollars over ten years.</p>","vixMult":"<b>Bail out if VIX rises this much above where it was when you opened.</b><p>The most valuable rule in this tool, and the only one that improves return <i>and</i> drawdown at once.</p><p>It works because volatility expands <i>before</i> price fully deteriorates \u2014 so you exit mid-move rather than at the bottom. Price-based stops fire after the damage is already priced in.</p><p>At 30% it fires on roughly 10% of trades.</p>","skew":"<b>How much implied vol rises per 1% that SPX falls.</b><p>Used to price strikes away from the money. Calibrated at 1.55 from a real chain snapshot.</p><p>This is one of the weakest links here \u2014 a single snapshot standing in for ten years of varying surfaces. Real historical option chains would replace it.</p>","stop":"<b>Optional bail-out rule, on top of the profit target and VIX exit.</b><p><b>N \u00d7 credit</b> \u2014 exit when buying the spread back costs N times what you collected.</p><p><b>Breakeven / short strike touch</b> \u2014 exit if SPX trades down to that level.</p><p>All fills are at the spread's true mid when the level is breached. On this data every option here costs money: by the time price reaches your level, the loss is already priced in.</p>","atmRatio":"<b>The most important number in this tool, and the least certain.</b><p>VIX measures <i>30-day</i> implied volatility and is inflated by skew. You trade <i>7-day</i> options. This ratio converts one to the other.</p><p>Fitting the one real chain we have gives 0.63. But that extrapolates a straight line from strikes 2.5–3.8% out down to at-the-money, and SPX skew flattens near the money — so the true value is probably higher. Default 0.70 is a compromise.</p><p><b>Results swing wildly on this.</b> At 0.70 the strategy loses money; at 0.78 it makes money. Until it's pinned down with real chain data, treat every number on this tab as provisional.</p>",
+const HELP={"spot":"<b>Where SPX is trading right now.</b><p>Every probability and price on this tab is measured relative to this number, so a stale value quietly skews everything. A 100-point error can swing the touch probability from 19% to 54%.</p><p>Check the <b>Calibration</b> stat: if the model delta doesn't roughly match what your broker shows at the short strike, spot is the first thing to fix.</p>","expiry":"<b>The date your spread expires.</b><p>Everything else counts down from here &mdash; the matrix columns, the odds, the days-left readout. Set it once on Friday and the tool stays current on its own.</p><p>Most of a short spread's profit arrives in the final two days, which is also when gamma is worst. That tension is the core of the strategy.</p>","ks":"<b>The put you sell.</b><p>This is where your risk begins. Above it at expiry you keep the full credit; below it you start losing.</p><p>Further out means safer but less credit \u2014 and credit falls faster than risk does, so going further out is not the free lunch it looks like.</p>","ivs":"<b>Implied volatility at the short strike.</b><p>Read it off your broker's chain. Together with the long-leg IV it defines the skew slope the model uses.</p><p>If the Calibration delta looks wrong, nudge this until it matches your chain.</p>","kl":"<b>The put you buy for protection.</b><p>Caps your loss. The gap between the two strikes is the width.</p><p>Wider means a slower bleed \u2014 dollars lost per SPX point is <b>$100 \u00d7 contracts</b>, independent of width \u2014 but wider also ties up more capital per contract.</p>","ivl":"<b>Implied volatility at the long strike.</b><p>Normally higher than the short-strike IV, because further-OTM puts carry more implied vol. That difference is the skew.</p>","credit":"<b>What you actually collected per spread.</b><p>Use your real fill, not the mid. Everything \u2014 breakeven, ROC, expected value \u2014 anchors to this, so a modelled number here quietly flatters every result.</p>","qty":"<b>Number of spreads.</b><p>The single most powerful risk lever you have. Halving contracts halves your loss rate and your income, cleanly and symmetrically.</p><p>Width and delta only reshape risk; size actually reduces it.</p>","markNow":"<b>What it costs to buy the spread back right now.</b><p>Read it off your broker. Leave it blank and the tool uses its own model instead, which is close but not exact &mdash; your broker marks off real bid/ask.</p><p>This is the same figure the matrix shows in its <i>Cost to close</i> view. Typing the real one makes the profit tracker exact rather than approximate.</p>",
+"ptTarget":"<b>Close once you have captured this much of the credit.</b><p>At 95%, a $2.00 credit gets bought back around $0.10.</p><p>Across ten years of history this single habit was the difference between the strategy working and not &mdash; it skips the final day, where gamma is worst.</p>",
+"stress":"<b>Multiplier on the derived skew.</b><p>Skew is calculated from the two IVs you entered \u2014 how much vol rises as price falls. At 1.0 you get exactly that.</p><p>Static skew from a chain snapshot understates what happens in a real selloff, when the whole vol surface lifts. Try 1.5\u20132.0 as a stress case. At 0 you're assuming vol never moves, which flatters every downside cell.</p>","bt_qty":"<b>Starting number of contracts.</b><p>The starting balance follows from this: contracts \u00d7 width \u00d7 $100. So 4 contracts of 50-wide is $20,000.</p>","sizing":"<b>How position size changes as the account moves.</b><p><b>Fixed</b> \u2014 always the same number of contracts. Profits accumulate as idle cash. Percentages stay comparable across account sizes.</p><p><b>Full balance</b> \u2014 contracts recalculated weekly as balance \u00f7 (width \u00d7 $100). Grows with profits, shrinks after losses, and the run ends outright if the balance can't fund one contract. Treat it as a stress test, not a plan.</p>","delta":"<b>Target delta for the short put.</b><p>Roughly the probability it finishes in the money. 0.05 means about a 5% chance.</p><p>The tool searches for the strike that matches this delta each week, so the distance adjusts automatically as volatility changes.</p><p>Lower delta is not straightforwardly safer \u2014 credit falls faster than risk does, so one bad week costs more clean weeks to repay.</p>","width":"<b>Distance between the strikes, in SPX points.</b><p>Sets both max loss and the collateral each contract requires. Also sets the starting balance on this tab.</p><p>Wider spreads bleed more slowly per point but need more capital, so at a fixed account size you hold fewer of them.</p>","pt":"<b>Close the trade once you've captured this much of the credit.</b><p>At 95%, a $1.19 credit gets bought back around $0.06.</p><p>Getting out a day or two early skips the worst of the final-day gamma. In this data that single habit is worth several thousand dollars over ten years.</p>","vixMult":"<b>Bail out if VIX rises this much above where it was when you opened.</b><p>The most valuable rule in this tool, and the only one that improves return <i>and</i> drawdown at once.</p><p>It works because volatility expands <i>before</i> price fully deteriorates \u2014 so you exit mid-move rather than at the bottom. Price-based stops fire after the damage is already priced in.</p><p>At 30% it fires on roughly 10% of trades.</p>","skew":"<b>How much implied vol rises per 1% that SPX falls.</b><p>Used to price strikes away from the money. Calibrated at 1.55 from a real chain snapshot.</p><p>This is one of the weakest links here \u2014 a single snapshot standing in for ten years of varying surfaces. Real historical option chains would replace it.</p>","stop":"<b>Optional bail-out rule, on top of the profit target and VIX exit.</b><p><b>N \u00d7 credit</b> \u2014 exit when buying the spread back costs N times what you collected.</p><p><b>Breakeven / short strike touch</b> \u2014 exit if SPX trades down to that level.</p><p>All fills are at the spread's true mid when the level is breached. On this data every option here costs money: by the time price reaches your level, the loss is already priced in.</p>","atmRatio":"<b>The most important number in this tool, and the least certain.</b><p>VIX measures <i>30-day</i> implied volatility and is inflated by skew. You trade <i>7-day</i> options. This ratio converts one to the other.</p><p>Fitting the one real chain we have gives 0.63. But that extrapolates a straight line from strikes 2.5–3.8% out down to at-the-money, and SPX skew flattens near the money — so the true value is probably higher. Default 0.70 is a compromise.</p><p><b>Results swing wildly on this.</b> At 0.70 the strategy loses money; at 0.78 it makes money. Until it's pinned down with real chain data, treat every number on this tab as provisional.</p>",
 "atmSlope":"<b>How much the ratio rises per VIX point above 15.</b><p>In calm markets the vol term structure is in contango — short-dated vol sits below long-dated. Under stress it inverts, and 7-day vol can exceed VIX outright.</p><p>At the default 0.0125, VIX 15 implies 10.5% 7-day ATM vol, VIX 30 implies 26.6%, VIX 45 implies 48.4%. The ratio is capped at 1.20.</p><p>This shape is a reasonable guess, not a measurement. VIX9D history would replace it with something real.</p>",
 "fee":"<b>Commission per leg.</b><p>Charged four times per trade — two legs to open, two to close. At $1.30 that's $5.20 per contract per round trip, roughly $2,600 over 509 trades.</p><p>Set it to your broker's actual rate including exchange and regulatory fees.</p>",
 "stopMult":"<b>How far the position can go against you before the stop fires.</b><p>Intended loss = (N \u2212 1) \u00d7 credit. At N=3 with a $1.19 credit you aim to lose about $238.</p><p>But compare intended loss against the worst trade in the results \u2014 at N=2 the intent is $119 and the reality is $2,838. About 71% of the time the spread blows past your level before you can act, so treat N as a hope rather than a guarantee.</p>"};
@@ -605,22 +676,17 @@ function bsDelta(S_,K,T,r,v){
 
 /* ================= TAB 1 ================= */
 const S={spot:7757.64,ks:7565,kl:7515,ivs:13.39,ivl:14.39,credit:2.00,qty:3,dte:7,
-         expiry:'',entryVix:'',curVix:'',vixTrig:30,
+         expiry:'',entryVix:'',curVix:'',vixTrig:30,ptTarget:95,markNow:'',
          rate:2.5,stress:1.0,early:1,regime:'calm'};
-let mode='pnl', active=0;
-const PRESETS=[
-  {n:'Your open trade',v:{ks:7565,kl:7515,ivs:13.39,ivl:14.39,credit:2.00,qty:3}},
-  {n:'100-wide × 2',   v:{ks:7565,kl:7465,ivs:13.39,ivl:15.47,credit:3.30,qty:2}},
-  {n:'200-wide × 1',   v:{ks:7565,kl:7365,ivs:13.39,ivl:17.50,credit:4.50,qty:1}},
-  {n:'Your avg (3.2% OTM)',v:{ks:7510,kl:7460,ivs:14.5,ivl:15.6,credit:2.43,qty:2}}
-];
+let mode='pnl';
 const FIELDS=[
-  ['spot','SPX spot',''],['dte','Days to expiry','d'],
+  ['spot','SPX spot',''],['expiry','Expiry date',''],
   ['ks','Short strike','P'],['ivs','Short IV','%'],
   ['kl','Long strike','P'],['ivl','Long IV','%'],
   ['credit','Credit filled','$'],['qty','Contracts',''],
-  ['expiry','Expiry date','date'],['entryVix','VIX at entry',''],
+  ['entryVix','VIX at entry',''],
   ['curVix','VIX now',''],['vixTrig','VIX exit trigger','% above entry'],
+  ['markNow','Cost to close','$ · blank = modelled'],['ptTarget','Profit target','%'],
   ['stress','Skew stress','×']
 ];
 const W=()=>Math.abs(S.ks-S.kl);
@@ -664,46 +730,64 @@ function empStats(){
   return {os,ol,pShort,pMax,pT,ev,n:d.n};
 }
 function build(){
-  $('presets').innerHTML=PRESETS.map((p,i)=>
-    `<button class="preset${i===active?' on':''}" data-i="${i}">${p.n}</button>`).join('');
   // broker convention: the leg you sell is red, the leg you buy is green
   const LEG={ks:'short',ivs:'short',kl:'long',ivl:'long'};
+  const ACTIONS = `<div class="acts">
+      <button class="save" id="btnsave">Save trade</button>
+      <button class="wipe" id="btnwipe">Clear saved trade</button>
+    </div>`;
   $('inputs').innerHTML=FIELDS.map(([k,l,u])=>{
     const leg=LEG[k]||'';
     const type = k==='expiry' ? 'date' : 'number';
     const step = k==='expiry' ? '' : ' step="any"';
     return `<div class="f${leg?' leg-'+leg:''}">${qm(k)}<label>${l}</label>`
-      +`<input type="${type}"${step} data-k="${k}" value="${S[k]}"><span class="u">${u}</span></div>`;
-  }).join('');
+      +`<input type="${type}"${step} data-k="${k}" value="${S[k]}"><span class="u" id="u-${k}">${u}</span></div>`;
+  }).join('') + ACTIONS;
+  $('btnsave').addEventListener('click',()=>{
+    savePos();
+    const b=$('btnsave'); b.classList.add('ok'); b.textContent='Saved';
+    setTimeout(()=>{ b.classList.remove('ok'); b.textContent='Save trade'; }, 1200);
+  });
+  $('btnwipe').addEventListener('click',()=>{
+    if(confirm('Clear the saved trade and start fresh?')) clearPos();
+  });
 }
 function stats(){
   const T=effDte()/365,r=S.rate/100;
   const d=bsDelta(S.spot,S.ks,T,r,S.ivs/100), be=S.ks-S.credit;
   $('stats').innerHTML=`
-   <div class="st"><div class="k">Max profit</div><div class="v pos">${money(maxP())}</div><div class="m">${(maxP()/maxL()*100).toFixed(2)}% ROC</div></div>
-   <div class="st"><div class="k">Max loss</div><div class="v neg">-${money(maxL()).slice(1)}</div><div class="m">${W()} wide × ${S.qty}</div></div>
+   <div class="st"><div class="k">Return on capital</div><div class="v pos">${(maxP()/maxL()*100).toFixed(2)}%</div><div class="m">if it expires worthless</div></div>
    <div class="st"><div class="k">Bleed rate</div><div class="v">$${S.qty*100}</div><div class="m">per SPX point</div></div>
    <div class="st"><div class="k">Breakeven</div><div class="v">${be.toFixed(2)}</div><div class="m">${((S.spot-be)/S.spot*100).toFixed(2)}% below</div></div>
    <div class="st"><div class="k">Skew derived</div><div class="v acc">${slope().toFixed(2)}</div><div class="m">IV pts / 1% drop</div></div>
    <div class="st"><div class="k">Calibration</div><div class="v acc">${d.toFixed(4)}</div><div class="m">model mid ${spreadVal(S.spot,S.dte).toFixed(2)}</div></div>`;
 }
 function hist(){
-  const e=empStats(), ml=maxL(), mp=maxP();
-  const sign=e.ev>=0?'pos':'neg', sg=e.ev>=0?'+':'';
-  $('histbox').innerHTML=`
-   <table><thead><tr><th class="pxcol">Measured outcome</th><th>Probability</th><th>Impact</th></tr></thead>
-   <tbody>
-     <tr><td class="pxcol">Short strike</td><td class="cell">${e.os.toFixed(2)}% OTM</td><td class="cell">${S.ks}</td></tr>
-     <tr><td class="pxcol">Long strike</td><td class="cell">${e.ol.toFixed(2)}% OTM</td><td class="cell">${S.kl}</td></tr>
-     <tr><td class="pxcol">Finishes below short</td><td class="cell">${e.pShort.toFixed(2)}%</td><td class="cell">partial or full loss</td></tr>
-     <tr class="kLong"><td class="pxcol">Finishes below long</td><td class="cell">${e.pMax.toFixed(2)}%</td><td class="cell neg">-${money(ml).slice(1)}</td></tr>
-     <tr><td class="pxcol">Touches short</td><td class="cell">${e.pT.toFixed(2)}%</td><td class="cell">${(e.pT/Math.max(.01,e.pShort)).toFixed(1)}× the finish rate</td></tr>
-     <tr class="kShort"><td class="pxcol">Expected value</td><td class="cell ${sign}">${sg}${money(e.ev)} / trade</td>
-       <td class="cell ${sign}">${sg}${money(e.ev*52)} / yr</td></tr>
-     <tr><td class="pxcol">Recovery</td><td class="cell">${(ml/Math.max(1,mp)).toFixed(0)} clean weeks</td><td class="cell">n=${e.n} windows</td></tr>
-   </tbody></table>
-   <div class="hnote">Interpolated from actual SPX history at your strikes. Change strikes, spot or size above and every figure moves with them.</div>`;
+  const el=$('histline'); if(!el) return;
+  const e=empStats();
+  const n = x => x < 0.5 ? 'fewer than 1 week'
+               : Math.round(x) === 1 ? 'about 1 week'
+               : 'about '+Math.round(x)+' weeks';
+  const keptPhrase = e.pShort < 0.5
+    ? 'More than 99 of those weeks held above'
+    : 'The other '+Math.max(0, 100-Math.round(e.pShort))+' weeks held above';
+  el.innerHTML=`<div class="histline">
+    <span class="lead">Ten years of SPX weeks &middot; Jul 2016 &ndash; Aug 2026</span>
+    <p class="hl-intro">Your short strike sits <b>${e.os.toFixed(2)}%</b> below where SPX is now.
+      Across those weeks, for every 100 of them:</p>
+    <ul class="hl-list">
+      <li><b>${n(e.pShort)}</b> saw SPX fall that far or more by Friday &mdash; today that would mean
+        closing under <b>${S.ks}</b>, where you start losing money.</li>
+      <li><b>${n(e.pT)}</b> fell that far at some point during the week, even if they recovered.</li>
+      <li><b>${n(e.pMax)}</b> fell <b>${e.ol.toFixed(2)}%</b> or more, past <b>${S.kl}</b> &mdash;
+        your worst case, ${money(maxL())}.</li>
+    </ul>
+    <p class="hl-foot">Measured as <b>percentage moves</b>, not price levels. SPX has never traded up here
+      before, but it has fallen this far from wherever it happened to be many times.
+      ${keptPhrase} and you would have kept the credit.</p>
+  </div>`;
 }
+
 function tint(p){
   if(Math.abs(p)<1) return {bg:'transparent',fg:'var(--muted)'};
   if(p>0){const a=Math.min(1,p/maxP());return{bg:`rgba(53,201,138,${.06+a*.26})`,fg:'#7BE0B4'};}
@@ -769,43 +853,6 @@ function probs(){
    <div class="pb"><div class="k">Touches short</div><div class="v acc">${pc(tch)}</div>
      <div class="m">${(tch/Math.max(1e-6,1-mp)).toFixed(1)}× the finish rate</div><div class="alt">measured <b>${e.pT.toFixed(2)}%</b></div></div>`;
 }
-function axisY(g,P,Wd,H,y0,y1,Y){
-  for(let i=0;i<=3;i++){const v=y0+(y1-y0)*i/3;
-    g.push(`<line class="gr" x1="${P.l}" y1="${Y(v)}" x2="${Wd-P.r}" y2="${Y(v)}"/>`,
-           `<text class="tk" x="${P.l-5}" y="${Y(v)+3}" text-anchor="end">${money(v)}</text>`);}
-}
-function chart1(){
-  const Wd=340,H=190,P={l:46,r:8,t:10,b:26},N=40,pts=[];
-  const D0=effDte();
-  for(let i=0;i<=N;i++){const d=D0*(1-i/N);pts.push([d,pnlAt(S.spot,d)]);}
-  const ys=pts.map(p=>p[1]),y0=Math.min(0,...ys),y1=Math.max(...ys)*1.08;
-  const X=d=>P.l+(1-d/(D0||1))*(Wd-P.l-P.r), Y=v=>H-P.b-(v-y0)/(y1-y0||1)*(H-P.t-P.b);
-  const g=[]; axisY(g,P,Wd,H,y0,y1,Y);
-  let hd=0; pts.forEach(p=>{if(p[1]>=maxP()*.5&&!hd)hd=p[0];});
-  g.push(`<line class="gr" x1="${X(hd)}" y1="${P.t}" x2="${X(hd)}" y2="${H-P.b}" stroke="var(--accent)" stroke-dasharray="3 3"/>`,
-    `<text class="tk" x="${X(hd)+4}" y="${P.t+9}" style="fill:var(--accent)">50%</text>`,
-    `<path d="${pts.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="var(--profit)" stroke-width="2"/>`);
-  [D0,D0/2,0].forEach(d=>g.push(`<text class="tk" x="${X(d)}" y="${H-8}" text-anchor="middle">${Math.round(d)}d</text>`));
-  $('c1').innerHTML=g.join('');
-}
-function chart2(){
-  const Wd=340,H=190,P={l:46,r:8,t:10,b:26},w=W();
-  const lo=S.kl-w*.3, hi=Math.max(S.spot*1.002,S.ks+w*.4);
-  const dN=effDte();
-  const days=[dN,Math.max(1,Math.round(dN/2)),0], cl=['#3E6B8C','#6FA3C7','var(--profit)'];
-  const N=60,series=days.map(d=>{const a=[];for(let i=0;i<=N;i++){const px=lo+(hi-lo)*i/N;a.push([px,pnlAt(px,d)]);}return a;});
-  const all=series.flat().map(p=>p[1]);
-  const y0=Math.min(...all)*1.05,y1=Math.max(...all)*1.15;
-  const X=p=>P.l+(p-lo)/(hi-lo)*(Wd-P.l-P.r), Y=v=>H-P.b-(v-y0)/(y1-y0||1)*(H-P.t-P.b);
-  const g=[]; axisY(g,P,Wd,H,y0,y1,Y);
-  g.push(`<line class="gr" x1="${X(S.ks)}" y1="${P.t}" x2="${X(S.ks)}" y2="${H-P.b}" stroke="var(--accent)" stroke-dasharray="3 3"/>`,
-   `<text class="tk" x="${X(S.ks)}" y="${H-8}" text-anchor="middle" style="fill:var(--accent)">${S.ks}</text>`,
-   `<line x1="${X(S.kl)}" y1="${P.t}" x2="${X(S.kl)}" y2="${H-P.b}" stroke="var(--loss)" stroke-width=".7" stroke-dasharray="2 4" opacity=".5"/>`,
-   `<text class="tk" x="${X(S.kl)}" y="${H-8}" text-anchor="middle" style="fill:var(--loss)">${S.kl}</text>`);
-  series.forEach((s,i)=>g.push(`<path d="${s.map((q,j)=>(j?'L':'M')+X(q[0]).toFixed(1)+' '+Y(q[1]).toFixed(1)).join(' ')}" fill="none" stroke="${cl[i]}" stroke-width="${i===2?2:1.3}"/>`));
-  days.forEach((d,i)=>g.push(`<text class="tk" x="${Wd-P.r-2}" y="${P.t+10+i*11}" text-anchor="end" style="fill:${cl[i]}">${d}d</text>`));
-  $('c2').innerHTML=g.join('');
-}
 function chart3(){
   const Wd=340,H=150,P={l:8,r:8,t:8,b:26};
   const v=S.ivs/100,T=effDte()/365,r=S.rate/100,sq=v*Math.sqrt(T);
@@ -840,308 +887,14 @@ function chart3(){
   });
   $('c3').innerHTML=g.join('');
 }
-function draw(){statusBar();vixPanel();stats();hist();probs();matrix();chart1();chart2();chart3();}
+function draw(){expiryNote();statusBar();vixPanel();ptPanel();stats();hist();probs();matrix();chart3();}
 
-/* ================= TAB 2 ================= */
-const BT={sizing:'fixed',qty:1,scale:'lin',widthMode:'pct',widthPct:0.65,stop:'none',stopMult:3,atmRatio:0.685,atmSlope:0.0206,fee:0,
-          delta:0.05,width:50,pt:95,vixMult:30,dte:7,skew:1.51,rate:0.025};
-// width either fixed in points, or a constant % of the index (the honest choice
-// over a decade in which SPX nearly quadrupled)
-function widthAt(spot){
-  if(BT.widthMode==='pts') return BT.width;
-  return Math.max(5, Math.round(spot*(BT.widthPct/100)/5)*5);
-}
-function firstSpot(){
-  for(let i=0;i<HIST.c.length;i++) if(HIST.w[i]===4) return HIST.c[i];
-  return HIST.c[0];
-}
-const collPer=(spot)=>widthAt(spot===undefined?firstSpot():spot)*100;
-const startBal=()=>Math.max(1,Math.round(BT.qty))*collPer(firstSpot());
-// VIX is 30-day and skew-inflated; 7-day ATM vol runs well below it in calm markets
-// and rises toward (or past) it as the term structure inverts under stress.
-function atmVol(vix){
-  const f=Math.min(1.20, BT.atmRatio + BT.atmSlope*Math.max(0,vix-15));
-  return vix*f;
-}
-const ivK=(S_,K,vix)=>Math.max(3, atmVol(vix)+BT.skew*((S_-K)/S_*100))/100;
-function findStrike(S_,base,T,tgt){
-  let lo=S_*0.78, hi=S_*0.999;
-  for(let i=0;i<50;i++){
-    const m=(lo+hi)/2;
-    if(Math.abs(bsDelta(S_,m,T,BT.rate,ivK(S_,m,base)))>tgt) hi=m; else lo=m;
-  }
-  return Math.round((lo+hi)/2/5)*5;
-}
-const sprVal=(S_,ks,kl,T,base)=>bsPut(S_,ks,T,BT.rate,ivK(S_,ks,base))-bsPut(S_,kl,T,BT.rate,ivK(S_,kl,base));
-const yearOf=i=>new Date(Date.parse(HIST.base)+HIST.d[i]*864e5).getUTCFullYear();
-
-function backtest(){
-  const N=HIST.c.length, out=[];
-  const pt=BT.pt/100, vm=1+BT.vixMult/100, D=Math.max(1,Math.round(BT.dte));
-  const START=startBal();
-  let acct=START, peak=START, ddPct=0, ddAbs=0, busted=false, skipped=0, bustYr=null;
-  const curve=[], rets=[], byYear={}, byWhy={};
-  for(let i=0;i<N-D;i++){
-    if(HIST.w[i]!==4) continue;
-    const S0=HIST.c[i], v0=HIST.v[i], T0=D/365;
-    const WID=widthAt(S0);
-    const ks=findStrike(S0,v0,T0,BT.delta), kl=ks-WID;
-    const cr=sprVal(S0,ks,kl,T0,v0);
-    if(cr<0.05) continue;
-    const riskPer=(WID-cr)*100;
-    let q = BT.sizing==='fixed' ? Math.max(1,Math.round(BT.qty))
-          : Math.floor(acct/(WID*100));
-    if(q<1){
-      if(BT.sizing!=='fixed'){ busted=true; bustYr=yearOf(i); break; }  // can't fund one contract
-      q=1;
-    }
-    let ex=null, why=null;
-    for(let j=1;j<=D;j++){
-      if(i+j>=N) break;
-      const Sj=HIST.c[i+j], Lj=HIST.l[i+j], vj=HIST.v[i+j], T=Math.max(0,(D-j)/365);
-      // stop rules are checked at the day's low and filled at the spread's true mid there
-      if(BT.stop!=='none'){
-        const atLow=sprVal(Lj,ks,kl,T,vj);
-        const hit = BT.stop==='pnl'  ? atLow>=cr*BT.stopMult
-                  : BT.stop==='be'   ? Lj<=ks-cr
-                  : BT.stop==='short'? Lj<=ks : false;
-        if(hit){ ex=Math.min(WID,atLow); why='stop'; break; }
-      }
-      const val=sprVal(Sj,ks,kl,T,vj);
-      if(vj>=v0*vm){ ex=val; why='vix'; break; }
-      if(val<=cr*(1-pt)){ ex=cr*(1-pt); why='pt'; break; }
-      if(T<=1e-9){ ex=Math.max(0,Math.min(ks-Sj,WID)); why='exp'; break; }
-    }
-    if(ex===null){ const Sj=HIST.c[Math.min(i+D,N-1)]; ex=Math.max(0,Math.min(ks-Sj,BT.width)); why='exp'; }
-    const pnl=(cr-ex)*100*q - BT.fee*4*q;   // 4 legs, round trip
-    rets.push(pnl/Math.max(1,acct));
-    acct+=pnl;
-    peak=Math.max(peak,acct);
-    ddPct=Math.min(ddPct,(acct-peak)/peak*100);
-    ddAbs=Math.min(ddAbs,acct-peak);
-    curve.push(acct);
-    const y=yearOf(i);
-    byYear[y]=(byYear[y]||0)+pnl;
-    byWhy[why]=(byWhy[why]||0)+1;
-    out.push({pnl,cr,why,q,wid:WID,otm:(S0-ks)/S0*100,yr:y});
-    if(acct<=0){ busted=true; bustYr=yearOf(i); break; }
-  }
-  if(!out.length) return {empty:true,skipped};
-  const n=out.length, years=(HIST.d[HIST.d.length-1]-HIST.d[0])/365.25;
-  const mean=rets.reduce((a,b)=>a+b,0)/n;
-  const sd=Math.sqrt(rets.reduce((a,b)=>a+(b-mean)**2,0)/n);
-  const dn=rets.filter(r=>r<0);
-  const dsd=dn.length?Math.sqrt(dn.reduce((a,b)=>a+b*b,0)/n):0;
-  const cagr=acct>0?((Math.pow(acct/START,1/years)-1)*100):-100;
-  let neg=0,tot=0,worst12=0;
-  for(let i=52;i<curve.length;i++){
-    const r=(curve[i]-curve[i-52])/curve[i-52]*100; tot++;
-    if(r<0) neg++;
-    worst12=Math.min(worst12,r);
-  }
-  return {n,acct,start:START,bustYr,cagr,ddPct,ddAbs,busted,skipped,curve,byYear,byWhy,years,
-    win:out.filter(t=>t.pnl>0).length/n*100,
-    worst:Math.min(...out.map(t=>t.pnl)),
-    avgCr:out.reduce((a,t)=>a+t.cr,0)/n,
-    avgOtm:out.reduce((a,t)=>a+t.otm,0)/n,
-    avgQ:out.reduce((a,t)=>a+t.q,0)/n,
-    avgWid:out.reduce((a,t)=>a+t.wid,0)/n,
-    sharpe:sd?mean/sd*Math.sqrt(52):0,
-    sortino:dsd?mean/dsd*Math.sqrt(52):0,
-    calmar:ddPct?Math.abs(cagr/ddPct):0,
-    neg12:tot?neg/tot*100:0, worst12,
-    firstYr:out[0].yr, lastYr:out[n-1].yr};
-}
-const BTACCT=[['qty','Contracts',''],['sizing','Sizing','how size changes']];
-const BTF=[['delta','Short delta',''],['widthMode','Width basis','points / % of spot'],
-           ['width','Width','pts'],['widthPct','Width','% of spot'],['pt','Profit target','%'],
-           ['vixMult','VIX exit trigger','% above entry'],['dte','DTE','d'],['skew','Skew slope','pts/1%'],
-           ['stop','Stop rule','how you bail'],['stopMult','Stop at N × credit','×'],
-           ['atmRatio','ATM vol / VIX','calm ratio'],['atmSlope','Ratio rise per VIX pt','above VIX 15'],
-           ['fee','Commission','$ per leg']];
-function btNote(){
-  const q0=Math.max(1,Math.round(BT.qty));
-  $('btbal').innerHTML=`<div class="hnote">Starting balance <b style="color:var(--accent)">`
-    +money(startBal())+`</b> &nbsp;=&nbsp; ${q0} contract${q0===1?'':'s'} × ${widthAt(firstSpot())}-wide × $100`
-    +(BT.widthMode==='pct'?` (${BT.widthPct}% of SPX ${Math.round(firstSpot()).toLocaleString()} at the start)`:'')+`.<br>`
-    +(BT.sizing==='fixed'
-      ? `<b>Fixed</b> — always ${q0} contract${q0===1?'':'s'}. Profits pile up as idle cash and never increase size.`
-      : `<b>Full balance</b> — every week, contracts = balance ÷ $${(BT.width*100).toLocaleString()}. Size grows as profits accumulate and shrinks after losses. No cash buffer, so the run ends if the balance drops below one contract.`)
-    +`</div>`;
-}
-function btBuild(){
-  btNote();
-  $('btacct').innerHTML=BTACCT.map(([k,l,u])=>{
-    if(k==='sizing') return `<div class="f">${qm('sizing')}<label>${l}</label><select data-b="sizing">
-      <option value="fixed"${BT.sizing==='fixed'?' selected':''}>Fixed contracts</option>
-      <option value="compound"${BT.sizing==='compound'?' selected':''}>Compound — full balance</option></select><span class="u">${u}</span></div>`;
-    return `<div class="f">${qm('bt_'+k)}<label>${l}</label><input type="number" step="any" data-b="${k}" value="${BT[k]}"><span class="u">${u}</span></div>`;
-  }).join('');
-  $('btin').innerHTML=BTF.map(([k,l,u])=>{
-    if(k==='widthMode') return `<div class="f">${qm('widthMode')}<label>${l}</label><select data-b="widthMode">
-      <option value="pct"${BT.widthMode==='pct'?' selected':''}>% of spot</option>
-      <option value="pts"${BT.widthMode==='pts'?' selected':''}>Fixed points</option>
-    </select><span class="u">${u}</span></div>`;
-    if(k==='width'&&BT.widthMode!=='pts') return '';
-    if(k==='widthPct'&&BT.widthMode!=='pct') return '';
-    if(k==='stop') return `<div class="f">${qm('stop')}<label>${l}</label><select data-b="stop">
-      <option value="none"${BT.stop==='none'?' selected':''}>None</option>
-      <option value="pnl"${BT.stop==='pnl'?' selected':''}>N × credit loss</option>
-      <option value="be"${BT.stop==='be'?' selected':''}>Breakeven touch</option>
-      <option value="short"${BT.stop==='short'?' selected':''}>Short strike touch</option>
-    </select><span class="u">${u}</span></div>`;
-    if(k==='stopMult'&&BT.stop!=='pnl') return '';
-    return `<div class="f">${qm(k)}<label>${l}</label><input type="number" step="any" data-b="${k}" value="${BT[k]}"><span class="u">${u}</span></div>`;
-  }).join('');
-}
-function btRun(){
-  const r=backtest();
-  if(!r||r.empty){
-    $('btstats').innerHTML='<div class="st" style="grid-column:1/-1"><div class="k">No trades</div>'
-      +'<div class="m">No trades produced at these settings. Check the delta and width values.</div></div>';
-    $('bthead').innerHTML=''; $('btstats2').innerHTML=''; $('btyears').innerHTML=''; $('c4').innerHTML=''; $('btrange').textContent='';
-    return; }
-  $('btrange').innerHTML = r.busted
-    ? `<span style="color:var(--loss)">RUN ENDED ${r.bustYr} — account could no longer fund one ${BT.width}-wide contract ($${(BT.width*100).toLocaleString()}). Everything below covers ${r.firstYr}–${r.lastYr} only.</span>`
-    : `${r.n} trades · ${r.firstYr}–${r.lastYr} · ${r.years.toFixed(1)} yrs`;
-  const g=v=>v>=0?'pos':'neg';
-  const net=r.acct-r.start, tr=net/r.start*100;
-  $('bthead').innerHTML=`<div class="bthead">
-     <span class="lbl">Start</span><span class="from">${money(r.start)}</span>
-     <span class="arrow">&rarr;</span>
-     <span class="lbl">End</span><span class="to ${g(net)}">${money(r.acct)}</span>
-     <span class="delta ${g(net)}">${net>=0?'+':''}${money(net)} &nbsp;·&nbsp; ${tr>=0?'+':''}${tr.toFixed(1)}% total</span>
-     <span class="sep"></span>
-     <span class="lbl">${r.busted?'stopped '+r.bustYr:r.years.toFixed(1)+' yrs · '+r.n+' trades'}</span>
-   </div>`;
-  $('btstats').innerHTML=`
-   <div class="st"><div class="k">CAGR${r.busted?' (partial)':''}</div><div class="v ${g(r.cagr)}">${r.cagr.toFixed(2)}%</div><div class="m">${money(r.start)} → ${money(r.acct)}</div></div>
-   <div class="st"><div class="k">Max drawdown</div><div class="v neg">${r.ddPct.toFixed(2)}%</div><div class="m">${money(r.ddAbs)}</div></div>
-   <div class="st"><div class="k">Calmar</div><div class="v acc">${r.calmar.toFixed(2)}</div><div class="m">CAGR ÷ maxDD</div></div>
-   <div class="st"><div class="k">Sharpe</div><div class="v">${r.sharpe.toFixed(2)}</div><div class="m">annualised</div></div>
-   <div class="st"><div class="k">Sortino</div><div class="v">${r.sortino.toFixed(2)}</div><div class="m">downside only</div></div>
-   <div class="st"><div class="k">Win rate</div><div class="v pos">${r.win.toFixed(2)}%</div><div class="m">${r.n} trades</div></div>`;
-  $('btstats2').innerHTML=`
-   <div class="st"><div class="k">Neg 12-mo</div><div class="v acc">${r.neg12.toFixed(2)}%</div><div class="m">worst ${r.worst12.toFixed(1)}%</div></div>
-   <div class="st"><div class="k">Worst trade</div><div class="v neg">${money(r.worst)}</div><div class="m">single loss</div></div>
-   <div class="st"><div class="k">Avg credit</div><div class="v">$${r.avgCr.toFixed(2)}</div><div class="m">${r.avgOtm.toFixed(2)}% OTM</div></div>
-   <div class="st"><div class="k">Avg size</div><div class="v">${r.avgQ.toFixed(1)}</div><div class="m">contracts · ${Math.round(r.avgWid)}-wide avg</div></div>
-   <div class="st"><div class="k">Exits</div><div class="v" style="font-size:12px">${Object.entries(r.byWhy).map(([k,v])=>k+' '+v).join(' · ')}</div><div class="m">pt / vix / exp</div></div>
-   <div class="st"><div class="k">Status</div><div class="v ${r.busted?'neg':'pos'}" style="font-size:13px">${r.busted?'STOPPED '+r.bustYr:'survived'}</div><div class="m">${r.busted?'account fell below one contract':'full period'}</div></div>`;
-  const ys=Object.entries(r.byYear);
-  $('btyears').innerHTML='<table><thead><tr><th class="pxcol">Year</th>'
-    +ys.map(([y])=>`<th>${y}</th>`).join('')+'</tr></thead><tbody><tr><td class="pxcol">P&L</td>'
-    +ys.map(([,v])=>`<td class="cell" style="color:${v>=0?'#7BE0B4':'#FF9AA2'}">${money(v)}</td>`).join('')
-    +'</tr></tbody></table>';
-  btChart(r);
-  calib();
-}
-function calib(){
-  const spot=7757.64, vix=14.90, T=7/365;
-  const real=[[7565,13.39,-0.0860],[7515,14.39,-0.0542],[7490,14.92,-0.0436],[7465,15.47,-0.0354]];
-  let err=0;
-  let h='<table><thead><tr><th class="pxcol">Strike</th><th>Actual IV</th><th>Model IV</th><th>Actual Δ</th><th>Model Δ</th><th>Δ error</th></tr></thead><tbody>';
-  real.forEach(([K,iv,d])=>{
-    const mIV=ivK(spot,K,vix)*100, mD=bsDelta(spot,K,T,BT.rate,mIV/100);
-    const e=(mD-d)/Math.abs(d)*100; err+=Math.abs(e);
-    const col=Math.abs(e)<12?'#7BE0B4':Math.abs(e)<30?'var(--accent)':'#FF9AA2';
-    h+=`<tr><td class="pxcol">${K}</td><td class="cell">${iv.toFixed(2)}%</td><td class="cell">${mIV.toFixed(2)}%</td>`
-      +`<td class="cell">${d.toFixed(4)}</td><td class="cell">${mD.toFixed(4)}</td>`
-      +`<td class="cell" style="color:${col}">${e>=0?'+':''}${e.toFixed(0)}%</td></tr>`;
-  });
-  const avg=err/real.length;
-  h+='</tbody></table><div class="hnote">Mean absolute delta error <b style="color:'
-    +(avg<12?'#7BE0B4':avg<30?'var(--accent)':'#FF9AA2')+'">'+avg.toFixed(0)+'%</b>'
-    +' &nbsp;·&nbsp; model 7-day ATM vol at VIX 14.90: <b>'+atmVol(vix).toFixed(2)+'%</b>'
-    +'. One chain on one calm day is thin calibration — a few snapshots at higher VIX would pin the slope.</div>';
-  $('calib').innerHTML=h;
-}
-function btChart(r){
-  const Wd=340,H=180,P={l:54,r:8,t:10,b:20}, c=r.curve, n=c.length;
-  const LOG = BT.scale==='log' && Math.min(...c,r.start)>0;
-  const f = LOG ? Math.log10 : (v=>v);
-  const lo0=Math.min(...c,r.start), hi0=Math.max(...c,r.start);
-  let y0,y1;
-  if(LOG){ y0=f(lo0)-0.02; y1=f(hi0)+0.02; }
-  else   { y0=lo0*0.96;    y1=hi0*1.04;    }
-  const X=i2=>P.l+i2/Math.max(1,n-1)*(Wd-P.l-P.r);
-  const Y=v=>H-P.b-(f(v)-y0)/((y1-y0)||1)*(H-P.t-P.b);
-  const g=[];
-  // gridlines: decade-anchored ticks on log, even quarters on linear
-  let ticks=[];
-  if(LOG){
-    const start=Math.floor(y0), end=Math.ceil(y1);
-    for(let e=start;e<=end;e++) for(const m of [1,2,5]){
-      const v=m*Math.pow(10,e);
-      if(f(v)>=y0&&f(v)<=y1) ticks.push(v);
-    }
-    if(ticks.length<3) ticks=[lo0,Math.sqrt(lo0*hi0),hi0];
-  } else {
-    for(let k=0;k<=3;k++) ticks.push(y0+(y1-y0)*k/3);
-  }
-  ticks.forEach(v=>g.push(
-    `<line class="gr" x1="${P.l}" y1="${Y(v).toFixed(1)}" x2="${Wd-P.r}" y2="${Y(v).toFixed(1)}"/>`,
-    `<text class="tk" x="${P.l-5}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end">${money(v)}</text>`));
-  // drawdown band
-  let pk=-1e18; const peaks=c.map(v=>{pk=Math.max(pk,v);return pk;});
-  let d=`M ${X(0)} ${Y(peaks[0]).toFixed(1)}`;
-  for(let i2=1;i2<n;i2++) d+=` L ${X(i2).toFixed(1)} ${Y(peaks[i2]).toFixed(1)}`;
-  for(let i2=n-1;i2>=0;i2--) d+=` L ${X(i2).toFixed(1)} ${Y(c[i2]).toFixed(1)}`;
-  g.push(`<path d="${d} Z" fill="rgba(238,95,107,.15)"/>`);
-  g.push(`<line class="gr" x1="${P.l}" y1="${Y(r.start).toFixed(1)}" x2="${Wd-P.r}" y2="${Y(r.start).toFixed(1)}" stroke="var(--dim)" stroke-dasharray="3 3"/>`);
-  g.push(`<path d="${c.map((v,i2)=>(i2?'L':'M')+X(i2).toFixed(1)+' '+Y(v).toFixed(1)).join(' ')}" fill="none" stroke="var(--profit)" stroke-width="1.6"/>`);
-  g.push(`<text class="tk" x="${P.l}" y="${H-6}">${r.firstYr}</text>`,
-         `<text class="tk" x="${Wd-P.r}" y="${H-6}" text-anchor="end">${r.lastYr}</text>`);
-  if(LOG) g.push(`<text class="tk" x="${Wd-P.r}" y="${P.t+8}" text-anchor="end" style="fill:var(--accent)">log scale</text>`);
-  $('c4').innerHTML=g.join('');
-}
-/* ===== events ===== */
-$('tabs').addEventListener('click',e=>{
-  const b=e.target.closest('button'); if(!b)return;
-  [...$('tabs').children].forEach(x=>x.classList.toggle('on',x===b));
-  $('pane-week').classList.toggle('on',b.dataset.p==='week');
-  $('pane-brief').classList.toggle('on',b.dataset.p==='brief');
-  if(b.dataset.p==='lab'&&!$('labstats').innerHTML) labAll();
-  window.scrollTo({top:0,behavior:'smooth'});
-});
 document.addEventListener('input',e=>{
-  const k=e.target.dataset.k, b=e.target.dataset.b;
-  if(k){
-    if(k==='expiry'){ S.expiry=e.target.value; draw(); savePos(); return; }
-    const v=parseFloat(e.target.value); if(!isFinite(v))return;
-    S[k]=v; draw(); savePos();
-  }
-});
-function commitBT(el){
-  const b=el.dataset.b; if(!b) return;
-  if(b==='sizing'){ BT.sizing=el.value; btNote(); btRun(); return; }
-  if(b==='stop'){ BT.stop=el.value; btBuild(); btRun(); return; }
-  if(b==='widthMode'){ BT.widthMode=el.value; btBuild(); btNote(); btRun(); return; }
-  const v=parseFloat(el.value);
-  if(!isFinite(v)){ el.value=BT[b]; return; }
-  if(v===BT[b]) return;
-  BT[b]=v; btNote(); btRun();
-}
-document.addEventListener('change',e=>{ if(e.target.dataset.b) commitBT(e.target); });
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&e.target.dataset.b){ e.preventDefault(); commitBT(e.target); e.target.blur(); }
-});
-$('presets').addEventListener('click',e=>{
-  const b=e.target.closest('.preset'); if(!b)return;
-  active=+b.dataset.i; Object.assign(S,PRESETS[active].v); build(); draw(); savePos();
-});
-$('empmodes').addEventListener('click',e=>{
-  const b=e.target.closest('button'); if(!b)return;
-  const t=b.dataset.t;
-  S[t]= t==='early' ? +b.dataset.v : b.dataset.v;
-  [...$('empmodes').children].forEach(x=>{ if(x.dataset.t===t) x.classList.toggle('on',x===b); });
-  hist(); probs();
-});
-if($('scalemodes')) $('scalemodes').addEventListener('click',e=>{
-  const b=e.target.closest('button'); if(!b)return;
-  BT.scale=b.dataset.s;
-  [...$('scalemodes').children].forEach(x=>x.classList.toggle('on',x===b));
-  btRun();
+  const k=e.target.dataset.k; if(!k) return;
+  if(k==='expiry'){ S.expiry=e.target.value; draw(); savePos(); return; }
+  if(k==='markNow'){ S.markNow=e.target.value; draw(); savePos(); return; }
+  const v=parseFloat(e.target.value); if(!isFinite(v)) return;
+  S[k]=v; draw(); savePos();
 });
 $('modes').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b)return;
@@ -1151,6 +904,7 @@ $('modes').addEventListener('click',e=>{
 });
 
 const hadSaved = loadPos();
+if(!S.expiry) S.expiry = nextFridayISO();
 build(); draw();
 if(!hadSaved) savePos();
 
