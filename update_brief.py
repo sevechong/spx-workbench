@@ -82,9 +82,18 @@ market internals, and a calendar. Each contains:
 
 The calendar block uses this markup instead of paragraphs:
   <div class="cal">
-    <div class="row"><span class="when">DATE</span><span class="what">EVENT</span><span class="imp">IMPACT</span></div>
+    <div class="row" data-date="YYYY-MM-DD"><span class="when">DATE</span><span class="what">EVENT</span><span class="imp">IMPACT</span></div>
     ... one row per event, 5 to 7 rows
   </div>
+
+  Every row MUST carry data-date with the ISO date of the event. For a week-long
+  window use the Monday. The page computes "today", "tomorrow" and so on from that
+  attribute at render time.
+
+  Never write relative words into the visible text. No "(today)", no "tomorrow",
+  no "this week". The brief may sit unchanged for days and those would go stale;
+  the data-date attribute handles it instead. Write only the plain date, e.g.
+  "Sep 4" or "Week of Sep 7".
 
 Finish with a <div class="blk"> titled "If you're selling premium" that covers:
   - whether VIX is pricing the known upcoming catalysts
