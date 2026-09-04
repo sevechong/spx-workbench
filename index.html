@@ -287,6 +287,20 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 @media(min-width:700px){.labgrid{grid-template-columns:1fr 1fr}}
 .labnote{background:var(--panel);border:1px solid var(--line2);border-radius:7px;
   padding:12px 14px;font-size:12.5px;line-height:1.6;color:var(--muted);margin-bottom:12px}
+.events{border:1px solid var(--line);border-left:3px solid var(--dim);border-radius:7px;
+  padding:11px 14px;margin-bottom:12px;background:var(--panel)}
+.events.hot{border-left-color:var(--accent)}
+.events .ehead{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:8px}
+.events.hot .ehead{color:var(--accent)}
+.events ul{list-style:none}
+.events li{display:flex;gap:10px;align-items:baseline;font-size:12.5px;line-height:1.55;
+  color:var(--muted);margin-bottom:4px}
+.events li:last-child{margin-bottom:0}
+.events .ewhen{font-family:var(--mono);font-size:11px;color:var(--text);flex:0 0 84px}
+.events .ehigh .ewhen{color:var(--accent);font-weight:600}
+.events .ewhat{flex:1;min-width:0}
+.events .eclear{font-size:12.5px;color:var(--muted)}
 .modelcheck{margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--dim);
   display:flex;gap:16px;flex-wrap:wrap;padding:0 2px}
 .modelcheck b{color:var(--muted);font-weight:600}
@@ -353,6 +367,7 @@ table{font-family:var(--sans);font-variant-numeric:tabular-nums}
     <div id="sanity"></div>
     <div id="statusbar"></div>
     <div class="trackers"><div id="vixbox"></div><div id="ptbox"></div></div>
+    <div id="events"></div>
 
     <div class="shead"><h2>Import a screenshot</h2><span class="note">optional — fills the fields below</span></div>
     <label class="drop" id="drop">
@@ -624,6 +639,44 @@ function modelCheck(){
   el.innerHTML=`<div class="modelcheck">
     <span>model <b>${mid.toFixed(2)}</b> vs your broker <b>${typed.toFixed(2)}</b></span>
     <span class="${off?'off':''}">${drift>=0?'+':''}${drift.toFixed(0)}% ${off?'&mdash; <b>your IVs look stale</b>':'&mdash; close enough'}</span>
+  </div>`;
+}
+// which calendar events fall between today and expiry
+function eventPanel(){
+  const el=$('events'); if(!el) return;
+  const rows=document.querySelectorAll('#briefbody .cal .row[data-date]');
+  if(!rows.length || !S.expiry){ el.innerHTML=''; return; }
+
+  const t=new Date(todayISO()+'T00:00:00');
+  const x=new Date(S.expiry+'T00:00:00');
+  if(isNaN(x)){ el.innerHTML=''; return; }
+
+  const hits=[];
+  rows.forEach(r=>{
+    const d=new Date(r.dataset.date+'T00:00:00');
+    if(isNaN(d) || d<t || d>x) return;
+    hits.push({
+      when:(r.querySelector('.when')||{}).textContent||'',
+      what:(r.querySelector('.what')||{}).textContent||'',
+      high:/high/i.test((r.querySelector('.imp')||{}).textContent||'')
+    });
+  });
+
+  const days=effDte();
+  const window=`between now and your ${x.toLocaleDateString(undefined,{month:'short',day:'numeric'})} expiry`;
+  if(!hits.length){
+    el.innerHTML=`<div class="events">
+      <div class="ehead">Event window</div>
+      <div class="eclear">Nothing scheduled ${window}${days<=7?'':''}. The calendar in the brief only runs two weeks out, so check it directly for anything further ahead.</div>
+    </div>`;
+    return;
+  }
+  const anyHigh=hits.some(h=>h.high);
+  el.innerHTML=`<div class="events${anyHigh?' hot':''}">
+    <div class="ehead">${hits.length} event${hits.length===1?'':'s'} ${window}</div>
+    <ul>${hits.map(h=>`<li class="${h.high?'ehigh':''}">
+      <span class="ewhen">${h.when}</span><span class="ewhat">${h.what}${h.high?' <b style="color:var(--accent)">· high impact</b>':''}</span>
+    </li>`).join('')}</ul>
   </div>`;
 }
 function statusBar(){
@@ -959,7 +1012,7 @@ function chart3(){
   });
   $('c3').innerHTML=g.join('');
 }
-function draw(){expiryNote();sanity();modelCheck();statusBar();vixPanel();ptPanel();stats();hist();matrix();chart3();}
+function draw(){expiryNote();sanity();modelCheck();eventPanel();statusBar();vixPanel();ptPanel();stats();hist();matrix();chart3();}
 
 $('tabs').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return;
@@ -995,7 +1048,7 @@ if(!hadSaved) savePos();
    means edits to the tool can never clobber the generated content. */
 fetch('brief.html?v=' + Date.now())
   .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
-  .then(html => { $('briefbody').innerHTML = html; dateCal(); briefAge(); })
+  .then(html => { $('briefbody').innerHTML = html; dateCal(); briefAge(); eventPanel(); })
   .catch(e => {
     $('briefbody').innerHTML =
       '<div class="stale">Could not load <b>brief.html</b> &mdash; ' + e.message +
