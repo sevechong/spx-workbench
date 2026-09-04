@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-update_brief.py — regenerates the Market Brief section of index.html.
+update_brief.py — regenerates brief.html, which index.html loads at runtime.
 
 Calls the Anthropic API with web search enabled, asks for the brief as HTML,
-and swaps it into index.html between the BRIEF:START / BRIEF:END markers.
+and writes it to brief.html. index.html is never touched, so editing the tool
+can never clobber the generated brief.
 
 Run locally:
     export ANTHROPIC_API_KEY="sk-ant-..."
@@ -24,9 +25,7 @@ import urllib.error
 MODEL = "claude-sonnet-5"
 MAX_TOKENS = 20000
 MAX_TURNS = 12
-INDEX = "index.html"
-START = "<!-- BRIEF:START -->"
-END = "<!-- BRIEF:END -->"
+OUT = "brief.html"
 
 ET = zoneinfo.ZoneInfo("America/New_York")
 
@@ -229,20 +228,10 @@ def main():
         print(fragment[:800])
         sys.exit(1)
 
-    with open(INDEX, encoding="utf-8") as f:
-        page = f.read()
+    with open(OUT, "w", encoding="utf-8") as f:
+        f.write(fragment + "\n")
 
-    if START not in page or END not in page:
-        sys.exit("Markers not found in index.html — was the file overwritten?")
-
-    a = page.index(START) + len(START)
-    b = page.index(END)
-    updated = page[:a] + "\n" + fragment + "\n  " + page[b:]
-
-    with open(INDEX, "w", encoding="utf-8") as f:
-        f.write(updated)
-
-    print(f"index.html updated — brief is {len(fragment):,} chars.")
+    print(f"{OUT} written — {len(fragment):,} chars.")
 
 
 if __name__ == "__main__":
