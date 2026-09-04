@@ -182,7 +182,7 @@ section{margin-bottom:22px}
 @media(min-width:1000px){.slgrid{grid-template-columns:repeat(3,1fr)}}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(min-width:660px){.stats{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:940px){.stats{grid-template-columns:repeat(5,1fr)}}
+@media(min-width:940px){.stats{grid-template-columns:repeat(4,1fr)}}
 .st{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px}
 .st .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
 .st .v{font-family:var(--mono);font-size:17px;font-weight:600}
@@ -215,14 +215,6 @@ td.half{box-shadow:inset 2px 0 0 var(--accent)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--dim)}
 .legend span{display:flex;align-items:center;gap:5px}
 .sw{width:11px;height:11px;border-radius:2px;display:inline-block}
-.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
-@media(min-width:760px){.pgrid{grid-template-columns:repeat(4,1fr)}}
-.pb{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:11px}
-.pb .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
-.pb .v{font-family:var(--mono);font-size:22px;font-weight:600}
-.pb .m{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
-.pb .alt{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:5px;padding-top:5px;border-top:1px solid var(--line)}
-.pb .alt b{color:var(--accent);font-weight:600}
 .charts{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:820px){.charts{grid-template-columns:1fr 1fr}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px}
@@ -295,6 +287,10 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 @media(min-width:700px){.labgrid{grid-template-columns:1fr 1fr}}
 .labnote{background:var(--panel);border:1px solid var(--line2);border-radius:7px;
   padding:12px 14px;font-size:12.5px;line-height:1.6;color:var(--muted);margin-bottom:12px}
+.modelcheck{margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--dim);
+  display:flex;gap:16px;flex-wrap:wrap;padding:0 2px}
+.modelcheck b{color:var(--muted);font-weight:600}
+.modelcheck .off b{color:var(--accent)}
 .histline{margin-top:9px;padding:10px 12px;background:var(--panel);border:1px solid var(--line);
   border-radius:6px;font-size:12.5px;line-height:1.6;color:var(--muted)}
 .histline b{font-family:var(--mono);color:var(--text);font-weight:600}
@@ -318,10 +314,10 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 body{letter-spacing:-0.01em}
-.st .v,.pb .v,.vixnums b,.sn .v{font-variant-numeric:tabular-nums;letter-spacing:-0.02em;font-weight:700}
+.st .v,.vixnums b,.sn .v{font-variant-numeric:tabular-nums;letter-spacing:-0.02em;font-weight:700}
 h1{font-weight:700;letter-spacing:-0.03em}
-.shead h2,.st .k,.f label,.sn .k,.pb .k{letter-spacing:.06em;font-weight:600}
-.f,.st,.card,.vixcard,.pb,.sn,.blk,.tldr,.tabs{border-radius:12px}
+.shead h2,.st .k,.f label,.sn .k{letter-spacing:.06em;font-weight:600}
+.f,.st,.card,.vixcard,.sn,.blk,.tldr,.tabs{border-radius:12px}
 table{font-family:var(--sans);font-variant-numeric:tabular-nums}
 </style>
 </head>
@@ -366,6 +362,7 @@ table{font-family:var(--sans);font-variant-numeric:tabular-nums}
 
     <div class="shead"><h2>Position</h2></div>
     <div class="grid" id="inputs"></div>
+    <div id="modelcheck"></div>
   </section>
 
   <section>
@@ -375,11 +372,10 @@ table{font-family:var(--sans);font-variant-numeric:tabular-nums}
   </section>
 
   <section>
-    <div class="shead"><h2>Modelled odds</h2><span class="note">lognormal, for comparison</span></div>
-    <div class="pgrid" id="probs"></div>
-    <div class="card" style="margin-top:12px">
-      <h3>Where the position lands</h3>
-      <p class="cs">Green is profit, amber the partial-loss band, red max loss.</p>
+    <div class="shead"><h2>Where the position lands</h2><span class="note">how likely each price is</span></div>
+    <div class="card">
+      <p class="cs" style="margin-top:0">Green is profit, amber the partial-loss band, red max loss.
+      Your strikes are marked; the curve is where SPX is likely to finish.</p>
       <svg id="c3" viewBox="0 0 340 150"></svg>
     </div>
   </section>
@@ -608,6 +604,23 @@ function sanity(){
     const t=S.ks; S.ks=S.kl; S.kl=t; build(); draw(); savePos();
   });
 }
+// the model's own numbers, for checking against a broker chain when setting up
+function modelCheck(){
+  const el=$('modelcheck'); if(!el) return;
+  const T=effDte()/365, r=S.rate/100;
+  const d=bsDelta(S.spot,S.ks,T,r,S.ivs/100);
+  const mid=spreadVal(S.spot,effDte());
+  const typed=parseFloat(S.markNow);
+  const drift=(isFinite(typed)&&typed>0) ? (mid-typed)/typed*100 : null;
+  const off = drift!==null && Math.abs(drift)>12;
+  el.innerHTML=`<div class="modelcheck">
+    <span>model delta <b>${d.toFixed(4)}</b></span>
+    <span>model mid <b>${mid.toFixed(2)}</b></span>
+    <span>skew <b>${slope().toFixed(2)}</b></span>
+    ${drift!==null ? `<span class="${off?'off':''}">vs your mark <b>${drift>=0?'+':''}${drift.toFixed(0)}%</b></span>`:''}
+    ${off ? '<span class="off"><b>check your IVs</b></span>':''}
+  </div>`;
+}
 function statusBar(){
   const el = $('statusbar'); if(!el) return;
   const d = effDte();
@@ -808,14 +821,16 @@ function build(){
   });
 }
 function stats(){
+  const e=empStats();
   const T=effDte()/365,r=S.rate/100;
   const d=bsDelta(S.spot,S.ks,T,r,S.ivs/100), be=S.ks-S.credit;
   $('stats').innerHTML=`
+   <div class="st"><div class="k">Odds of keeping it all</div>
+     <div class="v pos">${(100-e.pShort).toFixed(1)}%</div>
+     <div class="m">max loss ${e.pMax.toFixed(1)}% · measured</div></div>
    <div class="st"><div class="k">Return on capital</div><div class="v pos">${(maxP()/maxL()*100).toFixed(2)}%</div><div class="m">if it expires worthless</div></div>
    <div class="st"><div class="k">Bleed rate</div><div class="v">$${S.qty*100}</div><div class="m">per SPX point</div></div>
-   <div class="st"><div class="k">Breakeven</div><div class="v">${be.toFixed(2)}</div><div class="m">${((S.spot-be)/S.spot*100).toFixed(2)}% below</div></div>
-   <div class="st"><div class="k">Skew derived</div><div class="v acc">${slope().toFixed(2)}</div><div class="m">IV pts / 1% drop</div></div>
-   <div class="st"><div class="k">Calibration</div><div class="v acc">${d.toFixed(4)}</div><div class="m">model mid ${spreadVal(S.spot,S.dte).toFixed(2)}</div></div>`;
+   <div class="st"><div class="k">Breakeven</div><div class="v">${be.toFixed(2)}</div><div class="m">${((S.spot-be)/S.spot*100).toFixed(2)}% below</div></div>`;
 }
 function hist(){
   const el=$('histline'); if(!el) return;
@@ -887,30 +902,6 @@ function matrix(){
   });
   $('mx').innerHTML=h+'</tbody>';
 }
-function pAbove(B,v){
-  const T=effDte()/365,r=S.rate/100,sq=v*Math.sqrt(T);
-  return sq<=0?(S.spot>B?1:0):ncdf((Math.log(S.spot/B)+(r-v*v/2)*T)/sq);
-}
-function pTouch(B,v){
-  const T=effDte()/365,r=S.rate/100,sq=v*Math.sqrt(T);
-  if(sq<=0||B>=S.spot) return B>=S.spot?1:0;
-  const m=Math.log(B/S.spot), nu=r-v*v/2;
-  return Math.min(1,ncdf((m-nu*T)/sq)+Math.pow(B/S.spot,2*nu/(v*v))*ncdf((m+nu*T)/sq));
-}
-function probs(){
-  const be=S.ks-S.credit, pc=x=>(x*100).toFixed(1)+'%', e=empStats();
-  const win=pAbove(be,S.ivs/100), mp=pAbove(S.ks,S.ivs/100),
-        mlp=1-pAbove(S.kl,S.ivl/100), tch=pTouch(S.ks,S.ivs/100);
-  $('probs').innerHTML=`
-   <div class="pb"><div class="k">Breakeven or better</div><div class="v pos">${pc(win)}</div>
-     <div class="m">SPX above ${be.toFixed(2)}</div><div class="alt">measured <b>${(100-e.pShort).toFixed(1)}%</b></div></div>
-   <div class="pb"><div class="k">Full max profit</div><div class="v pos">${pc(mp)}</div>
-     <div class="m">SPX above ${S.ks}</div><div class="alt">measured <b>${(100-e.pShort).toFixed(1)}%</b></div></div>
-   <div class="pb"><div class="k">Full max loss</div><div class="v neg">${pc(mlp)}</div>
-     <div class="m">SPX below ${S.kl}</div><div class="alt">measured <b>${e.pMax.toFixed(2)}%</b></div></div>
-   <div class="pb"><div class="k">Touches short</div><div class="v acc">${pc(tch)}</div>
-     <div class="m">${(tch/Math.max(1e-6,1-mp)).toFixed(1)}× the finish rate</div><div class="alt">measured <b>${e.pT.toFixed(2)}%</b></div></div>`;
-}
 function chart3(){
   const Wd=340,H=150,P={l:8,r:8,t:8,b:26};
   const v=S.ivs/100,T=effDte()/365,r=S.rate/100,sq=v*Math.sqrt(T);
@@ -963,7 +954,7 @@ function chart3(){
   });
   $('c3').innerHTML=g.join('');
 }
-function draw(){expiryNote();sanity();statusBar();vixPanel();ptPanel();stats();hist();probs();matrix();chart3();}
+function draw(){expiryNote();sanity();modelCheck();statusBar();vixPanel();ptPanel();stats();hist();matrix();chart3();}
 
 $('tabs').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return;
