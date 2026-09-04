@@ -3,12 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SPX Put Spread Workbench</title>
+<title>Sevs Options Studio</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.png">
 <style>
 :root{
   --ground:#0B1017;--panel:#131A24;--panel2:#19212C;--line:#242F3D;--line2:#2E3B4C;
   --text:#E4EAF2;--muted:#7C8B9E;--dim:#54637A;
   --profit:#35C98A;--loss:#EE5F6B;--accent:#E9A33A;
+  --profit-rgb:53,201,138;--loss-rgb:238,95,107;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Monaco,Consolas,monospace;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
@@ -19,6 +22,17 @@ body{padding:14px 12px 60px;max-width:1180px;margin:0 auto}
 h1{font-family:var(--mono);font-size:17px;font-weight:600;margin:5px 0 2px}
 .sub{font-size:12.5px;color:var(--muted);line-height:1.45}
 header{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+.brandmark{width:38px;height:38px;flex:0 0 38px;color:var(--accent)}
+.brandtext{display:flex;flex-direction:column;line-height:1.04}
+.brandtext .b1{font-size:21px;font-weight:800;letter-spacing:-.03em;color:var(--text)}
+.brandtext .b2{font-size:8.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin-top:4px}
+@media(max-width:520px){
+  .brandmark{width:32px;height:32px;flex:0 0 32px}
+  .brandtext .b1{font-size:18px}
+  .brandtext .b2{font-size:8px;letter-spacing:.18em}
+}
 /* tabs */
 .tabs{display:flex;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:7px;overflow:hidden;margin-bottom:18px}
 .tabs button{flex:1;background:none;border:none;border-right:1px solid var(--line);color:var(--muted);
@@ -42,9 +56,9 @@ section{margin-bottom:22px}
 .drop input{display:none}
 .dres{margin-bottom:12px;border-radius:7px;padding:11px 13px;font-size:12.5px;line-height:1.55;display:none}
 .dres.show{display:block}
-.dres.ok{background:rgba(53,201,138,.08);border:1px solid rgba(53,201,138,.35);color:var(--muted)}
+.dres.ok{background:rgba(var(--profit-rgb),.08);border:1px solid rgba(var(--profit-rgb),.35);color:var(--muted)}
 .dres.warn{background:rgba(233,163,58,.08);border:1px solid rgba(233,163,58,.4);color:var(--muted)}
-.dres.err{background:rgba(238,95,107,.08);border:1px solid rgba(238,95,107,.4);color:var(--muted)}
+.dres.err{background:rgba(var(--loss-rgb),.08);border:1px solid rgba(var(--loss-rgb),.4);color:var(--muted)}
 .dres b{color:var(--text)}
 .dres .got{font-family:var(--mono);font-size:11.5px;margin-top:7px;color:var(--accent)}
 .dres .miss{font-family:var(--mono);font-size:11.5px;margin-top:5px;color:var(--loss)}
@@ -78,12 +92,12 @@ section{margin-bottom:22px}
 .vixcard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--profit);
   border-radius:7px;padding:12px 14px;margin-bottom:12px}
 .vixcard.warn{border-left-color:var(--accent)}
-.vixcard.fire{border-left-color:var(--loss);background:rgba(238,95,107,.06)}
+.vixcard.fire{border-left-color:var(--loss);background:rgba(var(--loss-rgb),.08)}
 .vixcard.dim{border-left-color:var(--dim);opacity:.62}
 .vixcard.dim .vixfill{background:var(--dim)}
 .vixcard.pt{border-left-color:var(--muted)}
 .vixcard.pt.near{border-left-color:var(--accent)}
-.vixcard.pt.done{border-left-color:var(--profit);background:rgba(53,201,138,.06)}
+.vixcard.pt.done{border-left-color:var(--profit);background:rgba(var(--profit-rgb),.08)}
 .vixcard.pt.near .vixsub{color:var(--accent)}
 .vixcard.pt.done .vixsub{color:var(--profit);font-weight:600}
 .vixcard.pt .vixfill{background:var(--muted)}
@@ -131,11 +145,11 @@ section{margin-bottom:22px}
 .f select option{background:var(--panel2);color:var(--text)}
 .f:focus-within{border-color:var(--accent)}
 .f.leg-short input{color:var(--loss)}
-.f.leg-short label{color:rgba(238,95,107,.72)}
-.f.leg-short{border-color:rgba(238,95,107,.30)}
+.f.leg-short label{color:rgba(var(--loss-rgb),.78)}
+.f.leg-short{border-color:rgba(var(--loss-rgb),.35)}
 .f.leg-long input{color:var(--profit)}
-.f.leg-long label{color:rgba(53,201,138,.72)}
-.f.leg-long{border-color:rgba(53,201,138,.30)}
+.f.leg-long label{color:rgba(var(--profit-rgb),.78)}
+.f.leg-long{border-color:rgba(var(--profit-rgb),.35)}
 .f.leg-short:focus-within,.f.leg-long:focus-within{border-color:var(--accent)}
 .f{position:relative}
 .f .u{color:var(--dim);font-size:11px}
@@ -255,7 +269,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .cal .when{color:var(--accent);flex:0 0 auto;min-width:104px}
 .cal .what{flex:1 1 190px;color:var(--muted);min-width:0;overflow-wrap:anywhere}
 .cal .imp{flex:0 0 auto;color:var(--dim);font-size:10.5px;margin-left:auto}
-.blk.stalebrief{border-color:rgba(238,95,107,.35)}
+.blk.stalebrief{border-color:rgba(var(--loss-rgb),.35)}
 .cal .row.past{opacity:.42}
 .cal .row.past .when{color:var(--dim)}
 .cal .rel{font-size:10.5px;margin-left:6px;color:var(--accent)}
@@ -265,7 +279,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
   .cal .imp{margin-left:0}
 }
 .sl{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:12px 13px 8px;transition:.15s}
-.sl.spike{border-color:rgba(238,95,107,.5)}
+.sl.spike{border-color:rgba(var(--loss-rgb),.5)}
 .sl-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
 .sl-lab{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim)}
 .sl-val{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--accent)}
@@ -292,24 +306,100 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .hl-foot{color:var(--dim);font-size:12px;padding-top:6px;border-top:1px solid var(--line)}
 .histline .lead{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--dim);display:block;margin-bottom:4px}
-.sanity{background:rgba(238,95,107,.10);border:1px solid rgba(238,95,107,.45);border-radius:7px;
+.sanity{background:rgba(var(--loss-rgb),.10);border:1px solid rgba(var(--loss-rgb),.45);border-radius:7px;
   padding:11px 14px;margin-bottom:12px;font-size:12.5px;line-height:1.55;color:#FF9AA2}
 .sanity b{color:#fff}
-.sanity button{display:block;margin-top:9px;background:none;border:1px solid rgba(238,95,107,.6);
+.sanity button{display:block;margin-top:9px;background:none;border:1px solid rgba(var(--loss-rgb),.6);
   color:#FF9AA2;font-family:var(--mono);font-size:11px;padding:6px 11px;border-radius:5px;cursor:pointer}
-.sanity button:hover{background:rgba(238,95,107,.18)}
+.sanity button:hover{background:rgba(var(--loss-rgb),.18)}
 .hnote{padding:10px;font-family:var(--mono);font-size:10.5px;color:var(--dim);line-height:1.5}
 .foot{font-size:11.5px;color:var(--dim);line-height:1.55;border-top:1px solid var(--line);padding-top:12px;margin-top:6px}
 .foot b{color:var(--muted);font-weight:600}
+
+/* ============ THEME PREVIEW ============
+   Temporary. Pick one and I'll bake it in and delete the switcher. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* B — Robinhood: black canvas, one bright green, white type */
+html[data-theme="rh"]{
+  --ground:#000000; --panel:#111214; --panel2:#1A1B1E;
+  --line:#232427; --line2:#33353A;
+  --text:#FFFFFF; --muted:#A8ABB2; --dim:#6E7178;
+  --profit:#5DD96F; --loss:#CE5656; --accent:#5DD96F;
+  --profit-rgb:93,217,111; --loss-rgb:206,86,86;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:'Inter',-apple-system,sans-serif;
+}
+html[data-theme="rh"] body{letter-spacing:-0.01em}
+html[data-theme="rh"] .st .v,html[data-theme="rh"] .pb .v,
+html[data-theme="rh"] .vixnums b,html[data-theme="rh"] .sn .v{
+  font-variant-numeric:tabular-nums;letter-spacing:-0.02em;font-weight:700}
+html[data-theme="rh"] h1{font-weight:700;letter-spacing:-0.03em;font-size:20px}
+html[data-theme="rh"] .shead h2,html[data-theme="rh"] .st .k,html[data-theme="rh"] .f label,
+html[data-theme="rh"] .sn .k,html[data-theme="rh"] .pb .k{letter-spacing:.06em;font-weight:600}
+html[data-theme="rh"] .f,html[data-theme="rh"] .st,html[data-theme="rh"] .card,
+html[data-theme="rh"] .vixcard,html[data-theme="rh"] .pb,html[data-theme="rh"] .sn,
+html[data-theme="rh"] .blk,html[data-theme="rh"] .tldr{border-radius:12px}
+html[data-theme="rh"] .tabs{border-radius:12px}
+html[data-theme="rh"] table{font-family:var(--sans);font-variant-numeric:tabular-nums}
+
+/* C — Daylight: white canvas, same bright accents */
+html[data-theme="day"]{
+  --ground:#FFFFFF; --panel:#F7F8FA; --panel2:#EDEFF3;
+  --line:#E2E5EA; --line2:#CBD1DA;
+  --text:#0B0D10; --muted:#4A505A; --dim:#858C97;
+  --profit:#3BA850; --loss:#C24343; --accent:#0B0D10;
+  --profit-rgb:59,168,80; --loss-rgb:194,67,67;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:'Inter',-apple-system,sans-serif;
+}
+html[data-theme="day"] body{letter-spacing:-0.01em}
+html[data-theme="day"] .st .v,html[data-theme="day"] .pb .v,
+html[data-theme="day"] .vixnums b,html[data-theme="day"] .sn .v{
+  font-variant-numeric:tabular-nums;letter-spacing:-0.02em;font-weight:700}
+html[data-theme="day"] h1{font-weight:700;letter-spacing:-0.03em;font-size:20px}
+html[data-theme="day"] .f,html[data-theme="day"] .st,html[data-theme="day"] .card,
+html[data-theme="day"] .vixcard,html[data-theme="day"] .pb,html[data-theme="day"] .sn,
+html[data-theme="day"] .blk,html[data-theme="day"] .tldr,html[data-theme="day"] .tabs{border-radius:12px}
+html[data-theme="day"] tbody tr:nth-child(even) .pxcol{background:#E6E9EE}
+html[data-theme="day"] table{font-family:var(--sans);font-variant-numeric:tabular-nums}
+html[data-theme="day"] .tabs button.on{background:#fff;color:#0B0D10;box-shadow:inset 0 -2px 0 #0B0D10}
+html[data-theme="day"] .stale{background:rgba(229,72,77,.07);border-color:rgba(229,72,77,.3);color:#B4262A}
+
+/* the switcher itself */
+#themebar{position:fixed;right:12px;bottom:12px;z-index:200;display:flex;gap:0;
+  background:var(--panel2);border:1px solid var(--line2);border-radius:9px;overflow:hidden;
+  box-shadow:0 6px 22px rgba(0,0,0,.4)}
+#themebar button{background:none;border:none;border-right:1px solid var(--line);
+  color:var(--muted);font-family:var(--mono);font-size:10.5px;padding:9px 12px;cursor:pointer}
+#themebar button:last-child{border-right:none}
+#themebar button.on{background:var(--accent);color:var(--ground);font-weight:600}
+
 </style>
 </head>
 <body>
 
 <header>
-  <div class="eyebrow">SPXW · European · Cash-settled</div>
-  <h1>SPX Put Spread Workbench</h1>
-  <p class="sub">One tab for the trade in front of you, one for testing rules across ten years of real SPX and VIX.</p>
+  <div class="brand">
+    <svg class="brandmark" viewBox="0 0 38 38" aria-hidden="true">
+      <rect x="2" y="2" width="34" height="34" rx="9" fill="none"
+            stroke="currentColor" stroke-width="3.2"/>
+      <path d="M9.5 25 H15.5 L22.5 14 H28.5" fill="none" stroke="currentColor"
+            stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="brandtext">
+      <span class="b1">Sevs</span>
+      <span class="b2">Options Studio</span>
+    </span>
+  </div>
+  <p class="sub">One tab for the trade in front of you, one for what's moving the market.</p>
 </header>
+
+<div id="themebar">
+  <button data-theme="">Terminal</button>
+  <button data-theme="rh">Robinhood</button>
+  <button data-theme="day">Daylight</button>
+</div>
 
 <div class="tabs" id="tabs">
   <button data-p="week" class="on">This week's trade<small>strikes · odds · P&amp;L matrix</small></button>
@@ -388,6 +478,8 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 
 <script>
 const $=id=>document.getElementById(id);
+
+
 const money=v=>(v<0?'-':'')+'$'+Math.abs(Math.round(v)).toLocaleString();
 const pctf=(v,d)=>(v>=0?'':'')+v.toFixed(d===undefined?2:d)+'%';
 
@@ -810,9 +902,12 @@ function hist(){
 
 function tint(p){
   if(Math.abs(p)<1) return {bg:'transparent',fg:'var(--muted)'};
-  if(p>0){const a=Math.min(1,p/maxP());return{bg:`rgba(53,201,138,${.06+a*.26})`,fg:'#7BE0B4'};}
+  const cs=getComputedStyle(document.documentElement);
+  const pr=cs.getPropertyValue('--profit-rgb').trim(), lr=cs.getPropertyValue('--loss-rgb').trim();
+  if(p>0){const a=Math.min(1,p/maxP());
+    return{bg:`rgba(${pr},${.07+a*.30})`,fg:'var(--profit)'};}
   const a=Math.min(1,Math.abs(p)/maxL());
-  return{bg:`rgba(238,95,107,${.06+a*.32})`,fg:'#FF9AA2'};
+  return{bg:`rgba(${lr},${.07+a*.34})`,fg:'var(--loss)'};
 }
 function rows(){
   const lo=Math.floor((S.kl-W()*0.30)/5)*5;
@@ -887,7 +982,9 @@ function chart3(){
     seg.forEach(p=>{d+=` L ${X(p[0]).toFixed(1)} ${Y(p[1]).toFixed(1)}`});
     return `<path d="${d} L ${X(seg[seg.length-1][0]).toFixed(1)} ${(H-P.b).toFixed(1)} Z" fill="${col}"/>`;
   };
-  const g=[band(lo,S.kl,'rgba(238,95,107,.34)'),band(S.kl,be,'rgba(233,163,58,.30)'),band(be,hi,'rgba(53,201,138,.28)'),
+  const cs=getComputedStyle(document.documentElement);
+  const PR=cs.getPropertyValue('--profit-rgb').trim(), LR=cs.getPropertyValue('--loss-rgb').trim();
+  const g=[band(lo,S.kl,`rgba(${LR},.34)`),band(S.kl,be,'rgba(233,163,58,.30)'),band(be,hi,`rgba(${PR},.28)`),
     `<path d="${pts.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="var(--muted)" stroke-width="1.2"/>`];
   // markers, staggered onto two rows when they'd collide
   const marks=[[S.kl,'long','var(--loss)'],[S.ks,'short','var(--accent)'],[S.spot,'spot','var(--muted)']]
@@ -936,6 +1033,23 @@ if(!S.expiry) S.expiry = nextFridayISO();
 S._t = S._t || {};
 LIVE_KEYS.forEach(k => { if(!S._t[k]) S._t[k] = Date.now(); });
 build(); draw();
+
+/* ===== theme preview (temporary) ===== */
+(function(){
+  const saved = (()=>{ try{ return localStorage.getItem('spx_theme')||''; }catch(e){ return ''; } })();
+  const apply = t => {
+    if(t) document.documentElement.setAttribute('data-theme',t);
+    else document.documentElement.removeAttribute('data-theme');
+    [...document.querySelectorAll('#themebar button')]
+      .forEach(x=>x.classList.toggle('on', x.dataset.theme===t));
+    try{ localStorage.setItem('spx_theme',t); }catch(e){}
+    if(typeof draw==='function') draw();
+  };
+  apply(saved);
+  document.getElementById('themebar').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(b) apply(b.dataset.theme);
+  });
+})();
 if(!hadSaved) savePos();
 
 /* ===== the brief lives in its own file =====
