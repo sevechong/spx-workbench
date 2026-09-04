@@ -8,12 +8,12 @@
 <link rel="apple-touch-icon" href="icon.png">
 <style>
 :root{
-  --ground:#0B1017;--panel:#131A24;--panel2:#19212C;--line:#242F3D;--line2:#2E3B4C;
-  --text:#E4EAF2;--muted:#7C8B9E;--dim:#54637A;
-  --profit:#35C98A;--loss:#EE5F6B;--accent:#E9A33A;
-  --profit-rgb:53,201,138;--loss-rgb:238,95,107;
-  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --ground:#000000;--panel:#111214;--panel2:#1A1B1E;--line:#232427;--line2:#33353A;
+  --text:#FFFFFF;--muted:#A8ABB2;--dim:#6E7178;
+  --profit:#5DD96F;--loss:#CE5656;--accent:#5DD96F;
+  --profit-rgb:93,217,111;--loss-rgb:206,86,86;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{max-width:100%;overflow-x:hidden;background:var(--ground);color:var(--text);font-family:var(--sans);-webkit-text-size-adjust:100%}
@@ -316,65 +316,13 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .foot{font-size:11.5px;color:var(--dim);line-height:1.55;border-top:1px solid var(--line);padding-top:12px;margin-top:6px}
 .foot b{color:var(--muted);font-weight:600}
 
-/* ============ THEME PREVIEW ============
-   Temporary. Pick one and I'll bake it in and delete the switcher. */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* B — Robinhood: black canvas, one bright green, white type */
-html[data-theme="rh"]{
-  --ground:#000000; --panel:#111214; --panel2:#1A1B1E;
-  --line:#232427; --line2:#33353A;
-  --text:#FFFFFF; --muted:#A8ABB2; --dim:#6E7178;
-  --profit:#5DD96F; --loss:#CE5656; --accent:#5DD96F;
-  --profit-rgb:93,217,111; --loss-rgb:206,86,86;
-  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --mono:'Inter',-apple-system,sans-serif;
-}
-html[data-theme="rh"] body{letter-spacing:-0.01em}
-html[data-theme="rh"] .st .v,html[data-theme="rh"] .pb .v,
-html[data-theme="rh"] .vixnums b,html[data-theme="rh"] .sn .v{
-  font-variant-numeric:tabular-nums;letter-spacing:-0.02em;font-weight:700}
-html[data-theme="rh"] h1{font-weight:700;letter-spacing:-0.03em;font-size:20px}
-html[data-theme="rh"] .shead h2,html[data-theme="rh"] .st .k,html[data-theme="rh"] .f label,
-html[data-theme="rh"] .sn .k,html[data-theme="rh"] .pb .k{letter-spacing:.06em;font-weight:600}
-html[data-theme="rh"] .f,html[data-theme="rh"] .st,html[data-theme="rh"] .card,
-html[data-theme="rh"] .vixcard,html[data-theme="rh"] .pb,html[data-theme="rh"] .sn,
-html[data-theme="rh"] .blk,html[data-theme="rh"] .tldr{border-radius:12px}
-html[data-theme="rh"] .tabs{border-radius:12px}
-html[data-theme="rh"] table{font-family:var(--sans);font-variant-numeric:tabular-nums}
-
-/* C — Daylight: white canvas, same bright accents */
-html[data-theme="day"]{
-  --ground:#FFFFFF; --panel:#F7F8FA; --panel2:#EDEFF3;
-  --line:#E2E5EA; --line2:#CBD1DA;
-  --text:#0B0D10; --muted:#4A505A; --dim:#858C97;
-  --profit:#3BA850; --loss:#C24343; --accent:#0B0D10;
-  --profit-rgb:59,168,80; --loss-rgb:194,67,67;
-  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --mono:'Inter',-apple-system,sans-serif;
-}
-html[data-theme="day"] body{letter-spacing:-0.01em}
-html[data-theme="day"] .st .v,html[data-theme="day"] .pb .v,
-html[data-theme="day"] .vixnums b,html[data-theme="day"] .sn .v{
-  font-variant-numeric:tabular-nums;letter-spacing:-0.02em;font-weight:700}
-html[data-theme="day"] h1{font-weight:700;letter-spacing:-0.03em;font-size:20px}
-html[data-theme="day"] .f,html[data-theme="day"] .st,html[data-theme="day"] .card,
-html[data-theme="day"] .vixcard,html[data-theme="day"] .pb,html[data-theme="day"] .sn,
-html[data-theme="day"] .blk,html[data-theme="day"] .tldr,html[data-theme="day"] .tabs{border-radius:12px}
-html[data-theme="day"] tbody tr:nth-child(even) .pxcol{background:#E6E9EE}
-html[data-theme="day"] table{font-family:var(--sans);font-variant-numeric:tabular-nums}
-html[data-theme="day"] .tabs button.on{background:#fff;color:#0B0D10;box-shadow:inset 0 -2px 0 #0B0D10}
-html[data-theme="day"] .stale{background:rgba(229,72,77,.07);border-color:rgba(229,72,77,.3);color:#B4262A}
-
-/* the switcher itself */
-#themebar{position:fixed;right:12px;bottom:12px;z-index:200;display:flex;gap:0;
-  background:var(--panel2);border:1px solid var(--line2);border-radius:9px;overflow:hidden;
-  box-shadow:0 6px 22px rgba(0,0,0,.4)}
-#themebar button{background:none;border:none;border-right:1px solid var(--line);
-  color:var(--muted);font-family:var(--mono);font-size:10.5px;padding:9px 12px;cursor:pointer}
-#themebar button:last-child{border-right:none}
-#themebar button.on{background:var(--accent);color:var(--ground);font-weight:600}
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+body{letter-spacing:-0.01em}
+.st .v,.pb .v,.vixnums b,.sn .v{font-variant-numeric:tabular-nums;letter-spacing:-0.02em;font-weight:700}
+h1{font-weight:700;letter-spacing:-0.03em}
+.shead h2,.st .k,.f label,.sn .k,.pb .k{letter-spacing:.06em;font-weight:600}
+.f,.st,.card,.vixcard,.pb,.sn,.blk,.tldr,.tabs{border-radius:12px}
+table{font-family:var(--sans);font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -395,11 +343,6 @@ html[data-theme="day"] .stale{background:rgba(229,72,77,.07);border-color:rgba(2
   <p class="sub">One tab for the trade in front of you, one for what's moving the market.</p>
 </header>
 
-<div id="themebar">
-  <button data-theme="">Terminal</button>
-  <button data-theme="rh">Robinhood</button>
-  <button data-theme="day">Daylight</button>
-</div>
 
 <div class="tabs" id="tabs">
   <button data-p="week" class="on">This week's trade<small>strikes · odds · P&amp;L matrix</small></button>
@@ -1033,23 +976,6 @@ if(!S.expiry) S.expiry = nextFridayISO();
 S._t = S._t || {};
 LIVE_KEYS.forEach(k => { if(!S._t[k]) S._t[k] = Date.now(); });
 build(); draw();
-
-/* ===== theme preview (temporary) ===== */
-(function(){
-  const saved = (()=>{ try{ return localStorage.getItem('spx_theme')||''; }catch(e){ return ''; } })();
-  const apply = t => {
-    if(t) document.documentElement.setAttribute('data-theme',t);
-    else document.documentElement.removeAttribute('data-theme');
-    [...document.querySelectorAll('#themebar button')]
-      .forEach(x=>x.classList.toggle('on', x.dataset.theme===t));
-    try{ localStorage.setItem('spx_theme',t); }catch(e){}
-    if(typeof draw==='function') draw();
-  };
-  apply(saved);
-  document.getElementById('themebar').addEventListener('click',e=>{
-    const b=e.target.closest('button'); if(b) apply(b.dataset.theme);
-  });
-})();
 if(!hadSaved) savePos();
 
 /* ===== the brief lives in its own file =====
