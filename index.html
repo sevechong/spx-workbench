@@ -255,6 +255,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .cal .when{color:var(--accent);flex:0 0 auto;min-width:104px}
 .cal .what{flex:1 1 190px;color:var(--muted);min-width:0;overflow-wrap:anywhere}
 .cal .imp{flex:0 0 auto;color:var(--dim);font-size:10.5px;margin-left:auto}
+.blk.stalebrief{border-color:rgba(238,95,107,.35)}
 .cal .row.past{opacity:.42}
 .cal .row.past .when{color:var(--dim)}
 .cal .rel{font-size:10.5px;margin-left:6px;color:var(--accent)}
@@ -376,101 +377,9 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 
 <!-- ================= TAB 3 ================= -->
 <div class="pane" id="pane-brief" style="min-width:0">
-  <!-- BRIEF:START -->
-<div class="stale">
-  AUTO-GENERATED 4 Sep 2026, 7:26am ET. Researched by Claude from public reporting and not reviewed by a human before publishing. Verify anything you intend to act on.
-</div>
-
-<div class="tldr">
-  <h3>The short version</h3>
-  <ul>
-    <li><b>Stocks jumped Thursday</b> as bond yields eased and traders scaled back bets on a Fed rate hike this month.</li>
-    <li>The <b>August jobs report</b>, due this morning, could decide whether the Fed hikes or holds at its next meeting.</li>
-    <li><b>Fed odds are close to a coin flip</b> on a September rate rise, down sharply from earlier in the week.</li>
-    <li>The <b>US and Iran are still trading strikes</b>, keeping oil prices near their highest levels in weeks.</li>
-    <li><b>Volatility (the VIX) is sitting near its lowest levels of the year</b>, even as markets enter a historically bumpier stretch.</li>
-    <li><b>AI spending remains the biggest story in tech</b>, with Nvidia, Micron and Broadcom all central to the narrative.</li>
-    <li>Washington is pushing other countries to go easy on <b>AI regulation</b> at this week's G20 meeting.</li>
-    <li>Under the surface, gains look <b>concentrated in a handful of sectors and mega-cap names</b> rather than broad-based.</li>
-  </ul>
-</div>
-
-<div class="snap">
-  <div class="sn">
-    <div class="k">S&P 500</div><div class="v">7,747.71</div><div class="c pos">+1.06%</div>
+  <div id="briefbody">
+    <div class="stale">Loading the market brief&hellip;</div>
   </div>
-  <div class="sn">
-    <div class="k">Nasdaq</div><div class="v">26,584.06</div><div class="c pos">+1.40%</div>
-  </div>
-  <div class="sn">
-    <div class="k">VIX</div><div class="v acc">14.32</div><div class="c neg">-5.79%</div>
-  </div>
-  <div class="sn">
-    <div class="k">10Y Yield</div><div class="v">4.77%</div><div class="c neg">-4.8 bps</div>
-  </div>
-  <div class="sn">
-    <div class="k">Crude (WTI)</div><div class="v">$90.75</div><div class="c neg">-0.60%</div>
-  </div>
-  <div class="sn">
-    <div class="k">FOMC Odds (Sep 16)</div><div class="v acc">~50%</div><div class="c">chance of a hike, vs ~70% earlier in the week</div>
-  </div>
-</div>
-
-<div class="blk">
-  <h3 class="neg">Geopolitics: the Iran conflict keeps energy on edge</h3>
-  <div class="tag">Strikes, retaliation, and oil</div>
-  <p>The US conducted another round of strikes on the Islamic Republic overnight, with President Trump threatening more attacks if Tehran responded, and within hours Iran retaliated against Jordan, Bahrain and Kuwait, countries that host American forces. That back-and-forth is the backdrop for this week's <span class="num">oil</span> moves.</p>
-  <p>Crude climbed to its highest closing level in roughly five weeks, with West Texas Intermediate settling above $90 a barrel and Brent finishing over $95 for the first time since late July, before pulling back from those highs, with WTI falling roughly <span class="num">0.82%</span> on Friday.</p>
-  <p>Supply factors are adding crosscurrents too: weekly U.S. inventories unexpectedly declined even as OPEC completed a phased increase of <span class="num">188,000</span> barrels a day agreed in early August, a reminder the conflict isn't the only driver of price.</p>
-</div>
-
-<div class="blk">
-  <h3 class="acc">The Fed and rates</h3>
-  <div class="tag">Waller's comments move the odds</div>
-  <p>The next Federal Reserve rate decision is scheduled for Wednesday, September 16, 2026, at 2:00 PM ET, and market pricing shifted after Fed Governor Christopher Waller said he would support keeping rates steady if price pressures continue to ease, with swaps now pricing roughly even odds of a hike, down from about <span class="num">70%</span> earlier in the week.</p>
-  <p>Following Waller's comment, the 10-year Treasury yield declined to <span class="num">4.77%</span> from <span class="num">4.818%</span> the previous day, which had been its highest level since November 2023, easing some of the pressure that's been weighing on stocks.</p>
-  <p>There's a political dimension too: Vice President JD Vance said the Fed should cut rates to make homes more affordable, adding to pressure President Trump has placed on the central bank to lower borrowing costs, keeping the independence question in the headlines.</p>
-</div>
-
-<div class="blk">
-  <h3>AI and tech</h3>
-  <div class="tag">Compute boom meets Washington politics</div>
-  <p>The AI infrastructure story keeps expanding: Nvidia's data center business grew revenue <span class="num">117%</span> year over year to <span class="num">$89.02 billion</span> last quarter, and the company expects capital spending from its top five hyperscaler customers to reach nearly <span class="num">$800 billion</span> in 2026 and <span class="num">$1.3 trillion</span> in 2027.</p>
-  <p>That spending now has a diplomatic angle: the Trump administration is using this week's G20 meeting to push other major economies toward lighter AI regulation, with Nvidia CEO Jensen Huang and OpenAI's Sam Altman appearing before ministers, under a White House framework instructing policymakers to avoid new regulatory bodies.</p>
-  <p>Politics and portfolios have blurred elsewhere in chips, too: Micron has surged <span class="num">132%</span> since President Trump purchased shares earlier this year, outperforming Nvidia's <span class="num">11%</span> gain over the same stretch, and Broadcom reported fiscal Q3 results on September 2, with Micron's own report due September 30.</p>
-</div>
-
-<div class="blk">
-  <h3>Market internals</h3>
-  <div class="tag">Concentration and narrow breadth</div>
-  <p>Thursday's rally was broad on the surface: nine of 11 S&P sectors finished higher, with the Materials and Communication Services sector funds leading at <span class="num">+1.7%</span> and <span class="num">+1.4%</span> respectively.</p>
-  <p>But not everything participated: home-building-related stocks tumbled after construction spending dropped <span class="num">0.5%</span> in July to its lowest level since October 2023, and Nike touched a 52-week low near <span class="num">$38</span> a share on the first day of September.</p>
-  <p>Under the hood, breadth has been thinner than the index suggests: roughly <span class="num">69%</span> of S&P 500 stocks were above their 200-day average in late August, but only about <span class="num">42%</span> were above their shorter 20-day average, and index gains this year have leaned heavily on a small number of mega-cap names.</p>
-</div>
-
-<div class="blk">
-  <h3>The calendar ahead</h3>
-  <div class="tag">Two weeks of scheduled catalysts</div>
-  <div class="cal">
-    <div class="row" data-date="2026-09-04"><span class="when">Sep 4</span><span class="what">August nonfarm payrolls / unemployment rate</span><span class="imp">High impact</span></div>
-    <div class="row" data-date="2026-09-07"><span class="when">Sep 7</span><span class="what">Labor Day — US stock and bond markets closed</span><span class="imp">Market closed</span></div>
-    <div class="row" data-date="2026-09-10"><span class="when">Sep 10</span><span class="what">Producer Price Index (PPI)</span><span class="imp">Medium impact</span></div>
-    <div class="row" data-date="2026-09-11"><span class="when">Sep 11</span><span class="what">Consumer Price Index (CPI)</span><span class="imp">High impact</span></div>
-    <div class="row" data-date="2026-09-16"><span class="when">Sep 16</span><span class="what">FOMC rate decision, 2:00pm ET, plus press conference</span><span class="imp">High impact</span></div>
-    <div class="row" data-date="2026-09-18"><span class="when">Sep 18</span><span class="what">Monthly/quarterly options expiration ("triple witching")</span><span class="imp">High impact for options positions</span></div>
-  </div>
-</div>
-
-<div class="blk">
-  <h3>If you're selling premium</h3>
-  <div class="tag">Questions to check, not calls to act on</div>
-  <p>Is a <span class="num">VIX</span> near <span class="num">14.32</span> — its lowest levels of the year — actually pricing in a payrolls print, a PPI/CPI pair, and a live FOMC meeting, or is it just reflecting a quiet summer?</p>
-  <p>Which of those catalysts fall inside a 7-day window opened today: does the calendar above show the jobs report, the Labor Day closure, PPI and CPI all landing before next Friday's expiry, while the FOMC decision itself sits just outside it?</p>
-  <p>One strategist has flagged that the mid-August-to-mid-October stretch has historically been choppier, particularly in mid-term election years, with pullbacks of at least 7% common in that window — how does current implied volatility compare to that historical pattern, and does the sample period even resemble today's setup?</p>
-</div>
-
-<p class="foot">Sourced from CNBC, Bloomberg, TheStreet, Yahoo Finance, Forbes, Benzinga, and CME FedWatch-derived data as reported by third parties; index and rate figures are intraday/last-close and will move. This is a summary of public reporting, not financial advice, and nothing here is a recommendation to buy, sell, or size any position.</p>
-  <!-- BRIEF:END -->
 
   <p class="foot">
   Compiled 1 Sep 2026 from CNBC, Yahoo Finance, Reuters, Schwab, Bloomberg, TheStreet, Axios, Brookings and Fortune reporting. Figures are intraday and will have moved. <b>This is a summary of what was reported, not investment advice or a forecast</b> — and the strategy views above are framed as questions to check, not calls to make.
@@ -1029,6 +938,35 @@ LIVE_KEYS.forEach(k => { if(!S._t[k]) S._t[k] = Date.now(); });
 build(); draw();
 if(!hadSaved) savePos();
 
+/* ===== the brief lives in its own file =====
+   It is rewritten every weekday by the workflow. Keeping it out of index.html
+   means edits to the tool can never clobber the generated content. */
+fetch('brief.html?v=' + Date.now())
+  .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+  .then(html => { $('briefbody').innerHTML = html; dateCal(); briefAge(); })
+  .catch(e => {
+    $('briefbody').innerHTML =
+      '<div class="stale">Could not load <b>brief.html</b> &mdash; ' + e.message +
+      '. On the live site this loads automatically; opening index.html straight from disk will not work.</div>';
+  });
+
+// the brief carries its own generation time; flag it when the content is old
+function briefAge(){
+  const banner = document.querySelector('#briefbody .stale');
+  if(!banner) return;
+  const m = banner.textContent.match(/AUTO-GENERATED\s+(\d+\s+\w+\s+\d{4})/);
+  if(!m) return;
+  const gen = new Date(m[1] + ' 12:00:00');
+  if(isNaN(gen)) return;
+  const days = Math.floor((new Date(todayISO()+'T12:00:00') - gen)/864e5);
+  if(days < 1) return;
+  const cal = document.querySelector('#briefbody .cal');
+  if(cal) cal.closest('.blk').classList.add('stalebrief');
+  banner.insertAdjacentHTML('beforeend',
+    `<div style="margin-top:7px;color:var(--loss);font-weight:600">This brief is ${days} day${days===1?'':'s'} old. `
+    + `The dates below update themselves, but the events and figures do not.</div>`);
+}
+
 /* ===== calendar: relative labels computed now, not baked in =====
    The brief is generated once and may sit for days, so anything like "today"
    written into the text goes stale. These are worked out from the real date. */
@@ -1054,7 +992,6 @@ function dateCal(){
     }
   });
 }
-dateCal();
 
 /* ===== screenshot import ===== */
 const PARSER_URL = "https://spx-parser.sevechong.workers.dev";
