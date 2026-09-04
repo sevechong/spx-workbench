@@ -290,7 +290,9 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .modelcheck{margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--dim);
   display:flex;gap:16px;flex-wrap:wrap;padding:0 2px}
 .modelcheck b{color:var(--muted);font-weight:600}
+.modelcheck .off{color:var(--accent)}
 .modelcheck .off b{color:var(--accent)}
+.modelcheck .hint{color:var(--dim)}
 .histline{margin-top:9px;padding:10px 12px;background:var(--panel);border:1px solid var(--line);
   border-radius:6px;font-size:12.5px;line-height:1.6;color:var(--muted)}
 .histline b{font-family:var(--mono);color:var(--text);font-weight:600}
@@ -604,21 +606,24 @@ function sanity(){
     const t=S.ks; S.ks=S.kl; S.kl=t; build(); draw(); savePos();
   });
 }
-// the model's own numbers, for checking against a broker chain when setting up
+// one check, one source: what the tool thinks the spread is worth
+// against the mid price your broker shows.
 function modelCheck(){
   const el=$('modelcheck'); if(!el) return;
-  const T=effDte()/365, r=S.rate/100;
-  const d=bsDelta(S.spot,S.ks,T,r,S.ivs/100);
   const mid=spreadVal(S.spot,effDte());
   const typed=parseFloat(S.markNow);
-  const drift=(isFinite(typed)&&typed>0) ? (mid-typed)/typed*100 : null;
-  const off = drift!==null && Math.abs(drift)>12;
+  if(!isFinite(typed) || typed<=0){
+    el.innerHTML=`<div class="modelcheck">
+      <span>model prices this spread at <b>${mid.toFixed(2)}</b></span>
+      <span class="hint">enter your broker's mid in <b>Cost to close</b> to check it</span>
+    </div>`;
+    return;
+  }
+  const drift=(mid-typed)/typed*100;
+  const off=Math.abs(drift)>12;
   el.innerHTML=`<div class="modelcheck">
-    <span>model delta <b>${d.toFixed(4)}</b></span>
-    <span>model mid <b>${mid.toFixed(2)}</b></span>
-    <span>skew <b>${slope().toFixed(2)}</b></span>
-    ${drift!==null ? `<span class="${off?'off':''}">vs your mark <b>${drift>=0?'+':''}${drift.toFixed(0)}%</b></span>`:''}
-    ${off ? '<span class="off"><b>check your IVs</b></span>':''}
+    <span>model <b>${mid.toFixed(2)}</b> vs your broker <b>${typed.toFixed(2)}</b></span>
+    <span class="${off?'off':''}">${drift>=0?'+':''}${drift.toFixed(0)}% ${off?'&mdash; <b>your IVs look stale</b>':'&mdash; close enough'}</span>
   </div>`;
 }
 function statusBar(){
