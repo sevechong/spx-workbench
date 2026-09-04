@@ -927,23 +927,39 @@ function chart3(){
   };
   const cs=getComputedStyle(document.documentElement);
   const PR=cs.getPropertyValue('--profit-rgb').trim(), LR=cs.getPropertyValue('--loss-rgb').trim();
-  const g=[band(lo,S.kl,`rgba(${LR},.34)`),band(S.kl,be,'rgba(233,163,58,.30)'),band(be,hi,`rgba(${PR},.28)`),
+  const g=[band(lo,S.kl,`rgba(${LR},.34)`),band(S.kl,be,'rgba(233,163,58,.28)'),band(be,hi,`rgba(${PR},.28)`),
     `<path d="${pts.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="var(--muted)" stroke-width="1.2"/>`];
   // markers, staggered onto two rows when they'd collide
-  const marks=[[S.kl,'long','var(--loss)'],[S.ks,'short','var(--accent)'],[S.spot,'spot','var(--muted)']]
+  const marks=[[S.kl,'long','var(--profit)'],[S.ks,'short','var(--loss)'],[S.spot,'spot','var(--muted)']]
     .filter(([px])=>px>=lo&&px<=hi)
     .map(([px,l,col])=>({px,l,col,x:X(px),txt:Math.round(px)+' '+l}))
     .sort((a,b)=>a.x-b.x);
-  const rowY=[H-12,H-4], lastX=[-1e9,-1e9];
+  // keep every label on one line: start centred, then push apart until nothing overlaps
+  const CH=2.7, PAD=5;
+  marks.forEach(m=>{ m.w=m.txt.length*CH; m.lx=m.x; });
+  for(let pass=0; pass<12; pass++){
+    let moved=false;
+    for(let i=1;i<marks.length;i++){
+      const a2=marks[i-1], b2=marks[i];
+      const need=(a2.w+b2.w)/2+PAD;
+      const have=b2.lx-a2.lx;
+      if(have<need){
+        const push=(need-have)/2;
+        a2.lx-=push; b2.lx+=push; moved=true;
+      }
+    }
+    // stay inside the frame
+    if(marks.length){
+      const first=marks[0], last=marks[marks.length-1];
+      const minX=P.l+first.w/2, maxX=Wd-P.r-last.w/2;
+      if(first.lx<minX){ const d=minX-first.lx; marks.forEach(m=>m.lx+=d); moved=true; }
+      if(last.lx>maxX){ const d=last.lx-maxX; marks.forEach(m=>m.lx-=d); moved=true; }
+    }
+    if(!moved) break;
+  }
   marks.forEach(m=>{
-    const gap=m.txt.length*2.7+4;              // approx label width at 4.5px mono
-    let row=0;
-    while(row<rowY.length-1 && m.x-lastX[row]<gap) row++;
-    lastX[row]=m.x;
-    // nudge inside the frame so edge labels aren't clipped
-    const half=gap/2, xa=Math.min(Math.max(m.x,P.l+half),Wd-P.r-half);
     g.push(`<line x1="${m.x.toFixed(1)}" y1="${P.t}" x2="${m.x.toFixed(1)}" y2="${H-P.b}" stroke="${m.col}" stroke-width=".7" stroke-dasharray="2 4" opacity=".55"/>`,
-      `<text class="tkm" x="${xa.toFixed(1)}" y="${rowY[row]}" text-anchor="middle" style="fill:${m.col}">${m.txt}</text>`);
+      `<text class="tkm" x="${m.lx.toFixed(1)}" y="${H-6}" text-anchor="middle" style="fill:${m.col}">${m.txt}</text>`);
   });
   $('c3').innerHTML=g.join('');
 }
